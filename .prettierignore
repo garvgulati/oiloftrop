@@ -1,7 +1,6 @@
-# Claude worktrees
-.claude/worktrees/
-
 # Local hidden directories
+.claude/
+.cursor/
 .agents/
 .codex/
 .conductor/

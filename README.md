@@ -11,6 +11,32 @@ are entered manually. Research availability and quote freshness depend on the
 market and provider. Portfolio-wide advice and a packaged public installer are
 still in development.
 
+## Screenshots
+
+These screenshots use fictional holdings and sample market data.
+
+### Portfolio home
+
+Open a saved holdings snapshot and see its record date, source, and coverage.
+The [phone view](docs/screenshots/holdings-phone.png) shows the same record.
+
+![Oiloftrop portfolio home with a fictional INR account](docs/screenshots/holdings-desktop.png)
+
+### Review holdings before saving
+
+Check the shares, quantities, and missing information before confirming a new
+snapshot.
+
+![Holdings preview with record details and the confirm button](docs/screenshots/holdings-preview.png)
+
+### Stock research and charts
+
+Inspect dates and prices, change the time range, and zoom in on the chart.
+The [research explanation](docs/screenshots/india-research-explanation.png)
+shows which financial signals supported the result and what still needs checking.
+
+![Interactive one-year Indian stock chart using sample prices](docs/screenshots/india-price-chart.png)
+
 ## Run locally
 
 Install Node.js 24, pnpm 10.33.4 and the Rust toolchain specified in

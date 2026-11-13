@@ -156,7 +156,7 @@ check.
   `pnpm test:e2e:net-worth` for relevant net-worth layout changes and
   `pnpm test:e2e:addon-sandbox` for addon sandbox changes. For application
   flows, use `pnpm test:e2e` or focused specs. Before running E2E tests, consult
-  `.claude/skills/run-e2e-tests/SKILL.md` and `e2e/README.md` for setup; use the
+  `e2e/README.md` for setup; use the
   selected suite's script/config for its server and browser requirements.
 
 For full PR checks and environment prerequisites, consult

@@ -112,6 +112,8 @@ Thumbs.db
 .playwright-report
 .playwright-mcp
 # AI tools
+.claude/
+.cursor/
 .codex/
 .kiro/
 .conductor/

@@ -77,6 +77,8 @@ test("protected personal intake survives desktop and phone reload without generi
   await expect(preview).toBeVisible();
   await expect(preview).toBeFocused();
   await expect(preview).toContainText("1.23456789");
+  await preview.scrollIntoViewIfNeeded();
+  await preview.screenshot({ path: test.info().outputPath("holdings-preview.png") });
   await page.getByRole("button", { name: "Confirm and save this snapshot", exact: true }).click();
   await expect(page.getByLabel("Saved holdings record", { exact: true })).toContainText(
     "1.23456789",
@@ -92,6 +94,8 @@ test("protected personal intake survives desktop and phone reload without generi
   await expect(
     page.getByText("Settled share quantity: 1.23456789", { exact: false }),
   ).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
+  await page.screenshot({ path: test.info().outputPath("holdings-desktop.png") });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(
