@@ -1,0 +1,30 @@
+import {test,expect} from "@playwright/test";
+import {sampleIndiaData} from "../../apps/frontend/src/features/research/india-summary.fixture";
+test.use({hasTouch:true,trace:"off"});
+test("year view resets old zoom, refreshes the trade point and has no date-range box",async({context,page},info)=>{
+ const state=await(await context.request.post("/api/v1/profiles/get_profile_state",{data:{}})).json();
+ const grant=await(await context.request.post("/api/v1/profiles/unlock_profile",{data:{profileId:state.profiles[0].id}})).json();
+ expect((await context.request.put("/api/v1/settings",{headers:{"x-wf-profile-scope":grant.scopeId},data:{onboardingCompleted:true,language:"en",baseCurrency:"INR",timezone:"Asia/Kolkata",syncEnabled:false,autoUpdateCheckEnabled:false}})).ok()).toBe(true);
+ const source=sampleIndiaData();const requests:string[]=[];let price=121;
+ const bars=(range:string)=>Array.from({length:range==="year"?247:12},(_,i)=>({time:range==="year"?new Date(Date.UTC(2025,9,27)+Math.floor(i*364/246)*86400000).toISOString():`2026-10-${String(i+1).padStart(2,"0")}T00:00:00+05:30`,open:100+i/50,high:102+i/50,low:99+i/50,close:101+i/50,volume:100+i}));
+ await page.route("**/api/v1/research/india/connection",r=>r.fulfill({json:{configured:true,expiresOn:"2027-01-01"}}));
+ await page.route("**/api/v1/research/india/search",r=>r.fulfill({json:{listings:[source.listing],retrievedAt:source.retrievedAt}}));
+ await page.route("**/api/v1/research/india/chart",r=>{const {range}=r.request().postDataJSON();requests.push(range);return r.fulfill({json:{listing:source.listing,range,interval:"1 day",candles:bars(range),quote:{price,lastTradeAt:price===121?"2026-10-27T06:36:00Z":"2026-10-27T06:36:15Z"},retrievedAt:"2026-10-27T07:00:00Z"}});});
+ const chart=page.getByRole("group",{name:"Candle closing-price history in INR"});
+ const points=async()=>((await chart.locator(".research-candle-series .recharts-line-curve").getAttribute("d"))?.match(/[ML]/g)??[]).length;
+ async function open(){await page.getByLabel("Market for stock research").selectOption("india");await page.getByLabel("Indian company name, symbol or ISIN").fill("TEST");await page.getByRole("button",{name:"Search India",exact:true}).click();await page.getByLabel("Verified company listing").selectOption(source.listing.key);await page.getByRole("button",{name:"Open chart",exact:true}).click();}
+ await page.setViewportSize({width:1280,height:900});await page.goto("/research");await open();await expect.poll(points).toBe(12);
+ await chart.getByRole("button",{name:"Zoom in",exact:true}).click();await expect.poll(points).toBe(6);
+ await page.getByRole("combobox",{name:/Chart range/}).selectOption("year");await expect.poll(points).toBe(247);
+ await expect(chart.locator(".recharts-xAxis-tick-labels")).toContainText("2025");await expect(chart.locator(".recharts-xAxis-tick-labels")).toContainText("2026");
+ await expect(page.getByRole("slider")).toHaveCount(0);await expect(page.getByTestId("visible-chart-window")).toHaveCount(0);
+ await expect(chart.getByText(/Last trade snapshot: ₹121/)).toBeVisible();
+ await chart.getByRole("button",{name:"Zoom in",exact:true}).click();await expect.poll(points).toBe(124);
+ price=122;await page.clock.install({time:new Date("2026-10-27T07:00:00Z")});await page.getByLabel("Update every 15 seconds").check();await page.clock.runFor(15100);
+ await expect(chart.getByText(/Last trade snapshot: ₹122/)).toBeVisible();await expect.poll(points).toBe(124);
+ await chart.getByRole("button",{name:"Reset view",exact:true}).click();await expect.poll(points).toBe(247);
+ const dot=chart.locator(".recharts-line-dots circle").first();await dot.hover();await expect(chart.getByRole("status")).toContainText("not a completed candle");await expect(chart.getByRole("status")).not.toContainText("Volume:");
+ await chart.locator(".recharts-wrapper").scrollIntoViewIfNeeded();await page.screenshot({path:info.outputPath("year-desktop.png")});
+ await page.setViewportSize({width:390,height:844});await open();await page.getByRole("combobox",{name:/Chart range/}).selectOption("year");await expect.poll(points).toBe(247);await chart.locator(".recharts-wrapper").scrollIntoViewIfNeeded();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:info.outputPath("year-mobile.png")});
+ expect(requests.every(r=>r==="month"||r==="year")).toBe(true);
+});

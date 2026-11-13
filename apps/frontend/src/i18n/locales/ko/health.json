@@ -1,0 +1,273 @@
+{
+  "issues": {
+    "price_manual_valuation_missing": {
+      "title_one": "{{symbol}}의 수동 평가액 누락",
+      "title_other": "보유 종목 {{count}}개의 수동 평가액 누락",
+      "message": "수동/커스텀 보유 종목은 평가된 성과 포지션으로 포함되려면 수동 평가액이 필요합니다."
+    },
+    "price_no_market_data": {
+      "title_one": "{{symbol}}의 시세 데이터 없음",
+      "title_other": "보유 종목 {{count}}개의 시세 데이터 없음",
+      "message": "일부 보유 종목의 시세 데이터를 가져올 수 없습니다. 잘못된 심볼이나 제공업체 문제일 수 있습니다. 포트폴리오 가치가 부정확할 수 있습니다."
+    },
+    "price_stale_outdated": {
+      "title_one": "보유 종목 {{count}}개의 가격이 오래됨",
+      "title_other": "보유 종목 {{count}}개의 가격이 오래됨",
+      "message": "일부 보유 종목의 가격이 3일 넘게 업데이트되지 않았습니다. 포트폴리오 가치가 부정확할 수 있습니다."
+    },
+    "price_update_needed": {
+      "title_one": "보유 종목 {{count}}개의 가격 업데이트 필요",
+      "title_other": "보유 종목 {{count}}개의 가격 업데이트 필요",
+      "message": "일부 보유 종목의 가격이 최근에 업데이트되지 않았습니다. 가격 동기화를 고려하세요."
+    },
+    "fx_missing": {
+      "title_one": "{{currency}}의 환율 누락",
+      "title_other": "통화 {{count}}개의 환율 누락",
+      "message": "일부 보유 종목을 기준 통화로 환산할 수 없습니다. 전체 포트폴리오 가치에 영향을 줍니다."
+    },
+    "fx_stale_error": {
+      "title_one": "환율 정보가 오래됨",
+      "title_other": "통화 {{count}}개의 환율 정보가 오래됨",
+      "message": "일부 환율이 3일 넘게 업데이트되지 않았습니다. 통화 환산이 부정확할 수 있습니다."
+    },
+    "fx_stale_warning": {
+      "title_one": "환율 업데이트 필요",
+      "title_other": "통화 {{count}}개의 환율 업데이트 필요",
+      "message": "일부 환율이 최근에 업데이트되지 않았습니다. 환율 새로고침을 고려하세요."
+    },
+    "classification_missing_category": {
+      "title_one": "보유 종목 {{count}}개에 카테고리 필요",
+      "title_other": "보유 종목 {{count}}개에 카테고리 필요",
+      "message": "일부 보유 종목에 {{taxonomy}}이(가) 지정되지 않았습니다. 배분 차트와 분석에 영향을 줍니다."
+    },
+    "classification_legacy_migration": {
+      "title_one": "자산 {{count}}개에 레거시 분류 데이터가 있음",
+      "title_other": "자산 {{count}}개에 레거시 분류 데이터가 있음",
+      "message": "일부 자산에 이전 형식의 업종/국가 데이터가 있습니다. 배분 추적을 개선하려면 새 분류 체계로 마이그레이션하세요."
+    },
+    "data_orphan_activity_account": {
+      "title_one": "거래가 존재하지 않는 계좌를 참조함",
+      "title_other": "거래 {{count}}건이 존재하지 않는 계좌를 참조함",
+      "message": "일부 거래가 더 이상 존재하지 않는 계좌를 가리키고 있습니다. 계산 오류가 발생할 수 있습니다."
+    },
+    "data_orphan_activity_asset": {
+      "title_one": "거래가 존재하지 않는 자산을 참조함",
+      "title_other": "거래 {{count}}건이 존재하지 않는 자산을 참조함",
+      "message": "일부 거래가 더 이상 존재하지 않는 자산을 가리키고 있습니다. 계산 오류가 발생할 수 있습니다."
+    },
+    "data_negative_position": {
+      "title_one": "보유 종목의 수량이 음수임",
+      "title_other": "보유 종목 {{count}}개의 수량이 음수임",
+      "message": "일부 보유 종목의 수량이 음수로 표시됩니다. 일반적으로 거래 누락이나 오류를 의미합니다."
+    },
+    "data_legacy_classification": {
+      "title_one": "자산 {{count}}개에 오래된 분류 데이터가 있음",
+      "title_other": "자산 {{count}}개에 오래된 분류 데이터가 있음",
+      "message": "일부 자산에 새 분류 체계로 마이그레이션할 수 있는 레거시 업종/국가 데이터가 있습니다."
+    },
+    "data_negative_account_balance": {
+      "title_one": "계좌에 음수 잔액이 있었음",
+      "title_other": "계좌 {{count}}개에 음수 잔액이 있었음",
+      "message": "하나 이상의 투자 계좌 기록에서 현금 또는 총 가치가 음수로 나타나 수익률이 잘못될 수 있습니다. 일반적으로 매수 전에 입금이나 이체 입금이, 또는 매도 전에 매수가 누락된 경우입니다."
+    },
+    "data_negative_cash_balance": {
+      "title_one": "현금 계좌에 음수 잔액이 있었음",
+      "title_other": "현금 계좌 {{count}}개에 음수 잔액이 있었음",
+      "message": "하나 이상의 현금 계좌 기록에서 잔액이 음수로 나타납니다. 정상적인 마이너스 통장일 수도 있고, 입금 내역이 누락된 것일 수도 있습니다."
+    },
+    "data_missing_lot_disposal_for_sell": {
+      "title_one": "매도 건에 취득원가 매칭 누락",
+      "title_other": "매도 {{count}}건에 취득원가 매칭 누락",
+      "message": "매도 건을 특정 취득 로트에 매칭할 수 없어 실현손익과 성과 귀속이 불완전할 수 있습니다."
+    },
+    "data_missing_generated_valuation": {
+      "title_one": "생성된 평가 기록이 불완전함",
+      "title_other": "생성된 평가 항목 {{count}}건 누락",
+      "message": "일부 보유 종목의 스냅샷 날짜에 대해 생성된 평가 항목이 없습니다. 누락된 가격, 수동 평가액 또는 환율을 수정한 후 계좌 기록을 재구성하세요."
+    },
+    "data_incomplete_valuation_value": {
+      "title_one": "평가 데이터 범위가 불완전함",
+      "title_other": "평가 항목 {{count}}건의 시장 가치가 불완전함",
+      "message": "일부 생성된 평가 항목의 시장 가치 범위가 불완전합니다. 성과 계산은 정확성을 보장하기 위해 영향을 받는 수익률을 사용 불가 또는 저하 상태로 표시합니다. 누락된 가격이나 수동 평가액을 확인하세요."
+    },
+    "data_incomplete_valuation_basis": {
+      "title_one": "취득원가 범위가 불완전함",
+      "title_other": "포지션 {{count}}개의 취득원가가 불완전함",
+      "message": "일부 포지션에 취득원가가 누락되었거나 일부만 있습니다. 시장 가치는 계속 표시될 수 있지만, 관련 활동을 수정하기 전까지는 손익 및 취득원가 기준 수익률을 확인할 수 없습니다."
+    },
+    "data_unknown_performance_flow_source": {
+      "title_one": "성과 흐름 경계가 불명확함",
+      "title_other": "평가 항목 {{count}}건의 이체 분류가 불명확함",
+      "message": "일부 생성된 평가 항목에 포트폴리오 경계가 불명확한 이체 또는 흐름이 포함되어 있습니다. 해당 날짜의 이체 활동을 검토하여 각 이체를 외부로 표시하거나 일치하는 계좌에 연결하세요."
+    },
+    "account_unconfigured": {
+      "title_one": "계좌 {{count}}개 설정 필요",
+      "title_other": "계좌 {{count}}개 설정 필요",
+      "message_one": "데이터 동기화를 시작하려면 추적 모드를 선택하세요.",
+      "message_other": "데이터 동기화를 시작하려면 추적 모드를 선택하세요."
+    },
+    "account_timezone_missing": {
+      "title": "시간대가 설정되지 않음",
+      "message": "날짜가 지역과 일치하도록 일반 설정에서 시간대를 설정하세요."
+    },
+    "account_timezone_invalid": {
+      "title": "설정된 시간대가 잘못됨",
+      "message": "설정된 시간대 \"{{timezone}}\"이(가) 잘못되었습니다. 일반 설정에서 업데이트하세요."
+    },
+    "account_timezone_mismatch": {
+      "title": "브라우저와 앱의 시간대가 다름",
+      "message": "설정된 시간대는 \"{{configured}}\"이지만 브라우저 시간대는 \"{{browser}}\"입니다. 날짜는 설정된 시간대를 따릅니다."
+    },
+    "quote_sync_error": {
+      "title_one": "{{symbol}}의 시세 동기화 실패",
+      "title_other": "자산 {{count}}개의 시세 동기화 실패",
+      "message": "이 자산들은 가격 동기화에 반복적으로 실패했습니다. 심볼이나 데이터 제공업체 설정을 확인하세요."
+    },
+    "quote_sync_warning": {
+      "title_one": "{{symbol}}의 동기화 문제",
+      "title_other": "자산 {{count}}개의 동기화 문제",
+      "message": "일부 자산에서 가격 동기화에 문제가 있습니다. 자동으로 해결될 수 있습니다."
+    },
+    "transfer_incomplete": {
+      "title_one": "불완전한 이체 발견",
+      "title_other": "불완전한 이체 {{count}}건 발견",
+      "message": "이체가 짝을 이루지 못했거나 상대 거래가 누락되어, 해당 흐름이 외부로 처리되어 수익률을 왜곡할 수 있습니다. 상대 거래와 짝을 지어주거나, 의도한 것이라면 외부로 표시하세요."
+    },
+    "data_stale_projection": {
+      "title_one": "오래된 계좌 내역",
+      "title_other": "오래된 계좌 내역 {{count}}개",
+      "message": "이 계좌 내역을 마지막으로 계산한 뒤 거래, 가격 또는 설정이 변경되었습니다. 가치와 수익률에 현재 데이터가 반영되도록 다시 계산하세요."
+    },
+    "data_rejected_activity": {
+      "title_one": "적용할 수 없는 거래",
+      "title_other": "적용할 수 없는 거래 {{count}}건",
+      "message": "이 거래들은 기록된 그대로 적용할 수 없어(예: 통화의 환율이 없거나, 표시 없이 공매도 포지션을 열거나 닫게 되는 경우) 잔액, 보유 종목, 수익률에서 제외되었습니다. 확인해 주세요."
+    },
+    "data_oversold_activity": {
+      "title_one": "보유량을 초과한 매도",
+      "title_other": "보유량을 초과한 매도 {{count}}건",
+      "message": "이 거래들은 당시 계좌가 보유한 수량보다 많이 매도하거나 이전합니다. 보유한 수량만 차감되었고 나머지에는 취득 원가가 없습니다. 누락된 매수나 입고 이전이 없는지 확인하세요."
+    },
+    "data_missing_activity_amount": {
+      "title_one": "금액이 없는 거래",
+      "title_other": "금액이 없는 거래 {{count}}건",
+      "message": "이 거래들에는 금액이 없어 현금 잔액이 바뀌지 않았습니다. 현금이 오갔다면 금액을 입력하세요."
+    },
+    "fx_conflicting_rates": {
+      "title_one": "{{from}}/{{to}} 환율 불일치",
+      "title_other": "통화쌍 {{count}}개의 환율 불일치",
+      "message": "같은 날짜에 양방향 환율이 모두 기록되어 있지만 서로 맞지 않습니다. 각 방향은 기록된 그대로 사용되므로 한 방향으로 환산했다가 되돌리면 금액이 달라집니다. 잘못된 환율을 수정하거나 삭제하세요."
+    }
+  },
+  "page": {
+    "heading": "데이터 건강도",
+    "text": "데이터 품질 문제를 파악하고 해결하세요"
+  },
+  "severity": {
+    "info": "정보",
+    "warning": "경고",
+    "error": "오류",
+    "critical": "심각"
+  },
+  "category": {
+    "prices": "가격",
+    "fxRates": "환율",
+    "categories": "카테고리",
+    "data": "데이터",
+    "accounts": "계좌",
+    "settings": "설정"
+  },
+  "actions": {
+    "fix": "수정",
+    "clear": "지우기",
+    "sync_prices": "가격 동기화",
+    "fetch_fx": "환율 가져오기",
+    "migrate_classifications": "분류 마이그레이션",
+    "migrate_legacy_classifications": "마이그레이션 시작",
+    "retry_sync": "동기화 재시도",
+    "to_holdings": "보유 종목 보기",
+    "to_activities": "활동 보기",
+    "to_accounts": "계좌 보기",
+    "to_taxonomies": "분류 체계 보기",
+    "to_market_data": "시세 데이터 보기",
+    "to_general_settings": "일반 설정 열기",
+    "to_connect": "계좌 구성",
+    "review_transfers": "이체 검토"
+  },
+  "updatedAt": "{{time}} 업데이트됨",
+  "healthy": {
+    "title": "데이터가 양호합니다",
+    "description": "발견된 문제가 없습니다. 포트폴리오 데이터가 일관되고 최신 상태입니다."
+  },
+  "loadError": {
+    "title": "건강 상태를 불러오지 못했습니다",
+    "retry": "다시 시도"
+  },
+  "sheet": {
+    "groupedPriceMessage": "Wealthfolio가 이 날짜들에 이월된 가격을 사용하고 있습니다. 실제 거래일의 가격을 다시 가져오거나 추가하세요. 해당 날짜가 휴장일이었다면 문제를 무시하세요.",
+    "pricesByInvestment": "투자 자산별 가격",
+    "pricesByInvestmentHint": "투자 자산을 열어 가격을 다시 가져오거나 추가하세요. 해당 날짜가 휴장일이었다면 문제를 무시하세요.",
+    "priceHistoryNeedsReview": "가격 기록 검토 필요",
+    "missingTradingDay_one": "누락된 거래일 1일: {{dates}}",
+    "missingTradingDay_other": "누락된 거래일 {{count}}일: {{dates}}",
+    "dateRange": "{{from}}부터 {{to}}까지",
+    "priceIssueSummary": "{{assetCount}}개 {{assetWord}}에서 가격 {{dateWord}} {{diagnosticCount}}건",
+    "priceDate_one": "날짜",
+    "priceDate_other": "날짜",
+    "investment_one": "투자 자산",
+    "investment_other": "투자 자산"
+  },
+  "detail": {
+    "categories": {
+      "priceStaleness": {
+        "label": "가격 최신성",
+        "description": "시세가 오래되어 새로고침이 필요합니다. 포트폴리오 평가의 정확도에 영향을 줄 수 있습니다."
+      },
+      "fxIntegrity": {
+        "label": "환율",
+        "description": "통화 환산을 위한 환율이 누락되었거나 오래되었습니다. 다중 통화 포트폴리오 계산에 영향을 줄 수 있습니다."
+      },
+      "classification": {
+        "label": "분류",
+        "description": "자산에 카테고리나 분류가 누락되었습니다. 포트폴리오 분석과 배분 분석에 영향을 줍니다."
+      },
+      "dataConsistency": {
+        "label": "데이터 일관성",
+        "description": "포트폴리오 데이터에서 불일치가 발견되었습니다. 보고서나 계산이 부정확할 수 있습니다."
+      },
+      "accountConfiguration": {
+        "label": "계좌 설정",
+        "description": "데이터를 동기화하려면 일부 계좌 설정이 필요합니다. 데이터 가져오기를 시작하려면 추적 모드를 설정하세요."
+      },
+      "settingsConfiguration": {
+        "label": "설정",
+        "description": "데이터가 올바르게 해석되도록 일부 애플리케이션 설정에 주의가 필요합니다."
+      },
+      "timezoneMissing": {
+        "label": "시간대 설정",
+        "description": "앱의 시간대가 설정되지 않았습니다. 설정하기 전까지 표시되는 날짜가 사용자의 지역과 다를 수 있습니다."
+      },
+      "timezoneInvalid": {
+        "label": "시간대 설정",
+        "description": "설정된 시간대가 잘못되었습니다. 일반 설정에서 업데이트하여 날짜 처리를 정상화하세요."
+      },
+      "timezoneMismatch": {
+        "label": "시간대 설정",
+        "description": "브라우저 시간대가 설정된 앱 시간대와 다릅니다. 포트폴리오 날짜는 설정된 시간대를 따릅니다."
+      }
+    },
+    "affectedItems": "영향받은 항목 ({{count}}개)",
+    "impact": "영향",
+    "affectedItemsCount": "영향받은 항목",
+    "portfolioImpact": "포트폴리오 영향",
+    "details": "세부정보",
+    "aboutThisIssue": "이 문제에 대해",
+    "dismiss": "무시",
+    "dismissConfirm": {
+      "title": "이 문제를 무시할까요?",
+      "message": "건강 센터에서 이 문제가 숨겨집니다. 근본 데이터가 변경되면 다시 나타납니다.",
+      "pendingText": "무시하는 중..."
+    },
+    "affectedItems_other": "영향받은 항목 ({{count}}개)"
+  }
+}

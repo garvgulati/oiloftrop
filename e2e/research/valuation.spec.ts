@@ -1,0 +1,58 @@
+import { test, expect } from "@playwright/test";
+import { sampleIndiaData } from "../../apps/frontend/src/features/research/india-summary.fixture";
+
+test.use({ trace: "off" });
+test("reviewed valuation works on phone and desktop, clears on edits and report removal", async ({ context, page }, info) => {
+  const state = await (await context.request.post("/api/v1/profiles/get_profile_state", { data: {} })).json();
+  const grant = await (await context.request.post("/api/v1/profiles/unlock_profile", { data: { profileId: state.profiles[0].id } })).json();
+  await context.request.put("/api/v1/settings", { headers: { "x-wf-profile-scope": grant.scopeId }, data: { onboardingCompleted: true, language: "en", baseCurrency: "INR", timezone: "Asia/Kolkata", syncEnabled: false, autoUpdateCheckEnabled: false } });
+  const data = sampleIndiaData();
+  let calls = 0;
+  await page.route("**/api/v1/research/india/connection", r => r.fulfill({ json: { configured: true, expiresOn: "2027-01-01" } }));
+  await page.route("**/api/v1/research/india/search", r => r.fulfill({ json: { listings: [data.listing], retrievedAt: data.retrievedAt } }));
+  await page.route("**/api/v1/research/india/analyse", r => { calls++; return r.fulfill({ json: data }); });
+  await page.clock.setFixedTime(new Date("2026-10-27T07:00:00Z"));
+  for (const width of [390, 1280]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
+    await page.goto("/research");
+    await page.getByLabel("Market for stock research").selectOption("india");
+    await page.getByLabel("Indian company name, symbol or ISIN").fill("TEST");
+    await page.getByRole("button", { name: "Search India", exact: true }).click();
+    await page.getByLabel("Verified company listing").selectOption(data.listing.key);
+    await page.getByRole("button", { name: "Analyse India", exact: true }).click();
+    await page.getByText("Price and earnings check", { exact: true }).click();
+    const panel = page.getByRole("region", { name: "Price and earnings check" });
+    await expect(panel.getByLabel("Full-year diluted EPS (INR/share)")).toHaveValue("");
+    const fill = async (label: string, value: string) => panel.getByLabel(label, { exact: true }).fill(value);
+    await fill("Share price (INR/share)", "200");
+    await fill("Price date", "2026-10-27");
+    await fill("Price source URL (https)", "https://example.com/quote");
+    await fill("Full-year diluted EPS (INR/share)", "10");
+    await fill("EPS period start", "2025-04-01");
+    await fill("EPS period end", "2026-03-31");
+    await fill("Earnings publication / filing date", "2026-05-12");
+    await fill("Earnings filing URL (https)", "https://example.com/filing");
+    await fill("Your assumed P/E (optional)", "15");
+    await fill("Reason for that P/E assumption", "Fictional peer scenario, not a forecast");
+    await panel.getByRole("checkbox").check();
+    await panel.getByRole("button", { name: "Calculate valuation check" }).click();
+    await expect(panel.getByRole("status")).toContainText("20×");
+    await expect(panel.getByRole("status")).toContainText("₹150.00");
+    await expect(panel.getByRole("status")).toContainText("-25%");
+    await expect(panel.getByRole("status")).toContainText("not a fair-value conclusion");
+    await panel.getByRole("status").scrollIntoViewIfNeeded();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: info.outputPath(`valuation-${width}.png`) });
+    await fill("Full-year diluted EPS (INR/share)", "-10");
+    await expect(panel.getByRole("status")).toHaveCount(0);
+    await expect(panel.getByRole("checkbox")).not.toBeChecked();
+    await panel.getByRole("checkbox").check();
+    await panel.getByRole("button", { name: "Calculate valuation check" }).click();
+    await expect(panel.getByRole("alert")).toContainText("zero or negative EPS");
+    await page.getByRole("button", { name: "Clear India result", exact: true }).click();
+    await expect(panel).toHaveCount(0);
+    await page.reload();
+    await expect(panel).toHaveCount(0);
+  }
+  expect(calls).toBe(2);
+});

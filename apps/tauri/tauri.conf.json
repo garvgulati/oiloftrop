@@ -1,0 +1,104 @@
+{
+  "build": {
+    "beforeDevCommand": "node ./apps/tauri/scripts/sync-ios-composer-icon.mjs && pnpm --filter frontend dev:tauri",
+    "beforeBuildCommand": "node ./apps/tauri/scripts/sync-ios-composer-icon.mjs && pnpm --filter frontend build:tauri",
+    "frontendDist": "../../dist",
+    "devUrl": "http://localhost:1420"
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/icon.png",
+      "icons/ios/AppIcon-512@2x.png",
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "copyright": "2026 Teymz Inc.",
+    "category": "public.app-category.finance",
+    "createUpdaterArtifacts": false,
+    "iOS": {
+      "bundleVersion": "1",
+      "infoPlist": "Info.ios.plist"
+    },
+    "macOS": {
+      "bundleVersion": "20260301.1",
+      "minimumSystemVersion": "12.0"
+    },
+    "linux": {
+      "deb": {
+        "desktopTemplate": "linux/wealthfolio.desktop"
+      },
+      "rpm": {
+        "desktopTemplate": "linux/wealthfolio.desktop"
+      }
+    }
+  },
+  "productName": "Oiloftrop",
+  "mainBinaryName": "Wealthfolio",
+  "version": "3.10.0",
+  "identifier": "com.garvgulati.oiloftrop",
+  "plugins": {
+    "deep-link": {
+      "mobile": [
+        {
+          "scheme": [
+            "wealthfolio"
+          ],
+          "appLink": false
+        },
+        {
+          "scheme": [
+            "https"
+          ],
+          "host": "connect.wealthfolio.app",
+          "pathPrefix": [
+            "/deeplink"
+          ]
+        },
+        {
+          "scheme": [
+            "https"
+          ],
+          "host": "connect-staging.wealthfolio.app",
+          "pathPrefix": [
+            "/deeplink"
+          ]
+        }
+      ],
+      "desktop": {
+        "schemes": [
+          "wealthfolio"
+        ]
+      },
+      "schemes": [
+        "wealthfolio"
+      ]
+    }
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "label": "main",
+        "create": true,
+        "dragDropEnabled": false,
+        "fullscreen": false,
+        "resizable": true,
+        "theme": "Light",
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true,
+        "title": "Oiloftrop",
+        "width": 1440,
+        "height": 960
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'sha256-s/UhdlprnzFxx+iXOtDj2n/Jk+MSRz1g/1lyBtFatVw=' 'wasm-unsafe-eval' blob: tauri: http://tauri.localhost https://tauri.localhost; style-src 'self' 'unsafe-inline' blob: tauri: http://tauri.localhost https://tauri.localhost; img-src 'self' data: blob: https: tauri: http://tauri.localhost https://tauri.localhost; font-src 'self' data: blob: tauri: http://tauri.localhost https://tauri.localhost; media-src 'self' data: blob:; connect-src 'self' https://wealthfolio.app https://auth.wealthfolio.app https://connect.wealthfolio.app https://connect-staging.wealthfolio.app; frame-src https://www.tradingview-widget.com/embed-widget/advanced-chart/; child-src 'self' blob: about:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; worker-src 'self' blob:",
+      "devCsp": "default-src 'self' http://localhost:1420; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'sha256-s/UhdlprnzFxx+iXOtDj2n/Jk+MSRz1g/1lyBtFatVw=' 'wasm-unsafe-eval' blob: http://localhost:1420; style-src 'self' 'unsafe-inline' blob: http://localhost:1420; img-src 'self' data: blob: https: http://localhost:1420; font-src 'self' data: blob: http://localhost:1420; media-src 'self' data: blob:; connect-src 'self' http://localhost:1420 ws://localhost:1420 http://localhost:3001 https://wealthfolio.app https://auth.wealthfolio.app https://connect.wealthfolio.app https://connect-staging.wealthfolio.app; frame-src https://www.tradingview-widget.com/embed-widget/advanced-chart/; child-src 'self' blob: about:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; worker-src 'self' blob:"
+    }
+  }
+}

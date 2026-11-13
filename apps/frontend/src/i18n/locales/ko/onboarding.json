@@ -1,0 +1,101 @@
+{
+  "buttons": {
+    "continue": "계속",
+    "subscribeConnect": "구독하고 연결하기",
+    "getStarted": "시작하기"
+  },
+  "steps": {
+    "chooseMode": {
+      "subtitle": "포트폴리오를 추적하는 두 가지 방법.",
+      "holdings": {
+        "title": "보유 종목",
+        "subtitle": "가치 추적",
+        "badge": "관리가 적은 추적 방식에 적합합니다.",
+        "features": {
+          "netWorth": "순자산 및 배분",
+          "unrealizedPnl": "가치 및 미실현 손익",
+          "priceBased": "가격 기반 성과",
+          "fastSetup": "빠르고 간편한 설정"
+        },
+        "limit": "제한: 거래 기반 TWR/IRR을 제공하지 않습니다.",
+        "note": "참고: 보유 종목/포지션을 직접 관리해야 합니다."
+      },
+      "transactions": {
+        "title": "거래 내역",
+        "subtitle": "성과 추적",
+        "badge": "전체 성과 분석에 적합합니다.",
+        "features": {
+          "totalReturn": "기간별 총수익률",
+          "attribution": "수익 및 현금흐름 기여도",
+          "completeView": "가장 완전한 성과 뷰",
+          "brokerSync": "증권사 동기화 또는 CSV 가져오기와 함께 사용하면 가장 좋습니다"
+        },
+        "limit": "제한: 모든 거래를 기록해야 합니다.",
+        "note": "참고: 증권사와 동기화하면 자동화됩니다."
+      },
+      "footnote": "계좌마다 다른 모드를 사용할 수 있습니다.",
+      "learnMore": "자세히 알아보기"
+    },
+    "preferences": {
+      "subtitle": "시작을 위한 몇 가지 설정만 하면 됩니다",
+      "currencyLabel": "통화",
+      "timezoneLabel": "시간대",
+      "other": "기타",
+      "selectCurrency": "통화 선택",
+      "selectTimezone": "시간대 선택",
+      "searchCurrenciesPlaceholder": "통화 검색...",
+      "searchTimezonesPlaceholder": "시간대 검색...",
+      "noCurrenciesFound": "통화를 찾을 수 없습니다",
+      "noTimezonesFound": "시간대를 찾을 수 없습니다",
+      "currencyRequired": "기준 통화를 선택해 주세요.",
+      "timezoneRequired": "시간대를 선택해 주세요.",
+      "languageLabel": "언어",
+      "formattingRegionLabel": "지역 및 표시 형식",
+      "searchRegionsPlaceholder": "지역 검색...",
+      "noRegionsFound": "지역을 찾을 수 없습니다",
+      "searchLanguagesPlaceholder": "언어 검색...",
+      "noLanguagesFound": "언어를 찾을 수 없습니다"
+    }
+  },
+  "appearance": {
+    "subtitle": "나만의 환경으로 꾸며보세요",
+    "themeLabel": "테마",
+    "fontLabel": "글꼴",
+    "themeLight": "라이트",
+    "themeDark": "다크",
+    "themeSystem": "시스템",
+    "themeLightPreviewAlt": "라이트 테마 미리보기",
+    "themeDarkPreviewAlt": "다크 테마 미리보기",
+    "themeSystemPreviewAlt": "시스템 테마 미리보기",
+    "fontSample": "명확하게 투자하세요.",
+    "fonts": {
+      "monoLabel": "모노",
+      "monoDescription": "기술적이고 정밀함",
+      "sansLabel": "산세리프",
+      "sansDescription": "깔끔하고 현대적임",
+      "serifLabel": "세리프",
+      "serifDescription": "고전적이고 우아함"
+    },
+    "navigationLabel": "내비게이션"
+  },
+  "connect": {
+    "optional": "선택사항",
+    "title": "Wealthfolio Connect",
+    "subtitle": "데이터를 비공개로 유지하면서 증권사를 자동으로 동기화하세요.",
+    "learnMore": "Connect에 대해 자세히 알아보기",
+    "features": {
+      "brokerageSync": {
+        "title": "증권사 동기화",
+        "description": "계좌와 거래 내역을 로컬 데이터베이스로 자동 동기화합니다."
+      },
+      "deviceSync": {
+        "title": "기기 동기화",
+        "description": "종단 간 암호화로 모든 기기에서 데이터베이스를 동기화 상태로 유지합니다."
+      },
+      "householdView": {
+        "title": "가족 계좌 뷰",
+        "description": "선택한 계좌를 가족과 공유하고 함께 통합 뷰를 확인하세요."
+      }
+    }
+  }
+}

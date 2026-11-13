@@ -1,0 +1,538 @@
+#[cfg(feature = "connect-sync")]
+use crate::commands::brokers_sync::{
+    perform_broker_sync_with_guard, try_acquire_broker_sync_guard,
+};
+#[cfg(feature = "device-sync")]
+use crate::commands::device_sync::{
+    clear_min_snapshot_created_at_from_store, ensure_background_engine_started,
+    get_sync_identity_from_store, sync_identity_can_run_background,
+};
+use crate::context::ServiceContext;
+use crate::profiles::{ConnectAccess, NativeProfiles, ProfileAccess};
+use log::{debug, error};
+use serde::Serialize;
+#[cfg(feature = "device-sync")]
+use std::future::Future;
+use std::sync::Arc;
+use tauri::{AppHandle, Manager};
+#[cfg(feature = "connect-sync")]
+use wealthfolio_connect::{
+    prepare_post_login_broker_bootstrap, BrokerApiClient, PostLoginBrokerBootstrapDecision,
+};
+use wealthfolio_connect::{
+    PostLoginBootstrapReason, PostLoginBootstrapResult, PostLoginBootstrapSyncResult,
+    CLOUD_REFRESH_TOKEN_KEY,
+};
+#[cfg(feature = "device-sync")]
+use wealthfolio_device_sync::SyncState;
+
+#[cfg(feature = "device-sync")]
+enum PostLoginDeviceBootstrapDecision {
+    StartBackground,
+    Skip(PostLoginBootstrapReason),
+}
+
+#[cfg(feature = "device-sync")]
+async fn prepare_post_login_device_bootstrap<
+    CheckBackgroundRunning,
+    CheckBackgroundRunningFuture,
+    LoadSyncState,
+    LoadSyncStateFuture,
+>(
+    can_run_background: bool,
+    check_background_running: CheckBackgroundRunning,
+    load_sync_state: LoadSyncState,
+) -> PostLoginDeviceBootstrapDecision
+where
+    CheckBackgroundRunning: FnOnce() -> CheckBackgroundRunningFuture,
+    CheckBackgroundRunningFuture: Future<Output = bool>,
+    LoadSyncState: FnOnce() -> LoadSyncStateFuture,
+    LoadSyncStateFuture: Future<Output = Result<SyncState, String>>,
+{
+    if !can_run_background {
+        return PostLoginDeviceBootstrapDecision::Skip(PostLoginBootstrapReason::NotEnrolled);
+    }
+
+    if check_background_running().await {
+        return PostLoginDeviceBootstrapDecision::Skip(PostLoginBootstrapReason::AlreadyRunning);
+    }
+
+    let sync_state = match load_sync_state().await {
+        Ok(sync_state) => sync_state,
+        Err(err) => {
+            debug!("[Connect] Post-login device sync skipped: {}", err);
+            return PostLoginDeviceBootstrapDecision::Skip(PostLoginBootstrapReason::Error);
+        }
+    };
+
+    if sync_state != SyncState::Ready {
+        return PostLoginDeviceBootstrapDecision::Skip(PostLoginBootstrapReason::NotReady);
+    }
+
+    PostLoginDeviceBootstrapDecision::StartBackground
+}
+
+#[tauri::command]
+pub async fn store_sync_session(
+    app: AppHandle,
+    refresh_token: String,
+    confirm_rebind: Option<bool>,
+    state: ProfileAccess,
+    scope_id: uuid::Uuid,
+) -> Result<(), String> {
+    let token = refresh_token.trim();
+    if token.is_empty() {
+        return Err("Refresh token must not be empty.".into());
+    }
+    let _transition = app
+        .state::<NativeProfiles>()
+        .begin_connect_transition(scope_id, &state)
+        .await?;
+    let context = state.context()?;
+    let _sync_lifecycle = context.sync_lifecycle.lock().await;
+    // Reserve broker sync for the complete login transition, including cleanup.
+    let _broker_guard =
+        wealthfolio_connect::acquire_broker_sync_guard(&context.broker_sync_running())
+            .ok_or("Broker sync is running. Wait for it to finish and try again.")?;
+    context
+        .connect_service()
+        .store_session(token, confirm_rebind.unwrap_or(false), || async {
+            #[cfg(feature = "device-sync")]
+            {
+                context.device_sync_runtime().clear_restore().await;
+                context
+                    .device_sync_runtime()
+                    .ensure_background_stopped()
+                    .await;
+                context.sync_approvals.clear()?;
+            }
+            context
+                .app_sync_repository()
+                .clear_connect_binding_state()
+                .await
+                .map_err(|e| e.to_string())?;
+            Ok(())
+        })
+        .await?;
+
+    state.backup_scheduler.wake();
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn post_login_bootstrap(
+    app: AppHandle,
+    state: ConnectAccess,
+) -> Result<PostLoginBootstrapResult, String> {
+    let context = state.context()?;
+    let cloned_context = context.clone();
+    let broker_sync = run_broker_bootstrap(app, Arc::clone(&cloned_context)).await;
+    let device_sync = run_post_login_device_bootstrap(cloned_context).await;
+
+    Ok(PostLoginBootstrapResult {
+        broker_sync,
+        device_sync,
+    })
+}
+
+#[cfg(feature = "connect-sync")]
+pub(crate) async fn run_broker_bootstrap(
+    app: AppHandle,
+    context: Arc<ServiceContext>,
+) -> PostLoginBootstrapSyncResult {
+    let entitlement_context = Arc::clone(&context);
+    let connections_context = Arc::clone(&context);
+    let guard_context = Arc::clone(&context);
+
+    let decision = prepare_post_login_broker_bootstrap(
+        true,
+        move || async move {
+            entitlement_context
+                .connect_service()
+                .has_broker_sync()
+                .await
+        },
+        move || async move {
+            let client = connections_context
+                .connect_service()
+                .get_api_client()
+                .await?;
+            client.list_connections().await.map_err(|e| e.to_string())
+        },
+        move || try_acquire_broker_sync_guard(guard_context.as_ref()),
+    )
+    .await;
+
+    let guard = match decision {
+        PostLoginBrokerBootstrapDecision::Start(guard) => guard,
+        PostLoginBrokerBootstrapDecision::Skip(reason) => {
+            return PostLoginBootstrapSyncResult::skipped(reason);
+        }
+    };
+
+    let app_handle = app.clone();
+    tauri::async_runtime::spawn(async move {
+        match perform_broker_sync_with_guard(&context, Some(&app_handle), guard).await {
+            Ok(_result) => {
+                debug!("[Connect] Broker bootstrap sync completed successfully");
+            }
+            Err(err) => {
+                error!("[Connect] Broker bootstrap sync failed: {}", err);
+            }
+        }
+    });
+
+    PostLoginBootstrapSyncResult::started()
+}
+
+#[cfg(not(feature = "connect-sync"))]
+pub(crate) async fn run_broker_bootstrap(
+    _app: AppHandle,
+    _context: Arc<ServiceContext>,
+) -> PostLoginBootstrapSyncResult {
+    PostLoginBootstrapSyncResult::skipped(PostLoginBootstrapReason::FeatureDisabled)
+}
+
+#[cfg(feature = "device-sync")]
+async fn run_post_login_device_bootstrap(
+    context: Arc<ServiceContext>,
+) -> PostLoginBootstrapSyncResult {
+    let Some(identity) = get_sync_identity_from_store(&context) else {
+        return PostLoginBootstrapSyncResult::skipped(PostLoginBootstrapReason::NotEnrolled);
+    };
+
+    let background_context = Arc::clone(&context);
+    let sync_state_context = Arc::clone(&context);
+    let decision = prepare_post_login_device_bootstrap(
+        sync_identity_can_run_background(&identity),
+        move || async move {
+            background_context
+                .device_sync_runtime()
+                .is_background_running()
+                .await
+        },
+        move || async move {
+            let token = sync_state_context
+                .connect_service()
+                .get_valid_access_token()
+                .await
+                .map_err(|err| format!("failed to mint token ({})", err))?;
+            sync_state_context
+                .device_enroll_service()
+                .get_sync_state(&token)
+                .await
+                .map(|sync_state| sync_state.state)
+                .map_err(|err| format!("failed to get sync state ({})", err.message))
+        },
+    )
+    .await;
+
+    match decision {
+        PostLoginDeviceBootstrapDecision::StartBackground => {}
+        PostLoginDeviceBootstrapDecision::Skip(reason) => {
+            if matches!(reason, PostLoginBootstrapReason::AlreadyRunning) {
+                context.device_sync_runtime().notify_sync_work_available();
+            }
+            return PostLoginBootstrapSyncResult::skipped(reason);
+        }
+    }
+
+    match ensure_background_engine_started(Arc::clone(&context)).await {
+        Ok(()) => PostLoginBootstrapSyncResult::started(),
+        Err(err) => {
+            debug!(
+                "[Connect] Post-login device sync background start failed: {}",
+                err
+            );
+            PostLoginBootstrapSyncResult::skipped(PostLoginBootstrapReason::Error)
+        }
+    }
+}
+
+#[cfg(not(feature = "device-sync"))]
+async fn run_post_login_device_bootstrap(
+    _context: Arc<ServiceContext>,
+) -> PostLoginBootstrapSyncResult {
+    PostLoginBootstrapSyncResult::skipped(PostLoginBootstrapReason::FeatureDisabled)
+}
+
+#[tauri::command]
+pub async fn clear_sync_session(state: ConnectAccess) -> Result<(), String> {
+    let context = state.context()?;
+    disconnect_cloud_session(&context).await
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SyncSessionStatus {
+    pub is_configured: bool,
+}
+
+#[tauri::command]
+pub fn get_sync_session_status(state: ConnectAccess) -> Result<SyncSessionStatus, String> {
+    let context = state.context()?;
+    Ok(SyncSessionStatus {
+        is_configured: context.connect_service().is_session_configured()?,
+    })
+}
+
+/// Clear explicit logout credentials and stop the worker in one transition.
+async fn disconnect_cloud_session(context: &ServiceContext) -> Result<(), String> {
+    context.backup_scheduler.wake();
+    context
+        .connect_service()
+        .clear_session_with(|| async {
+            #[cfg(feature = "device-sync")]
+            context.device_sync_runtime().clear_restore().await;
+            #[cfg(feature = "device-sync")]
+            clear_min_snapshot_created_at_from_store(context);
+            let _ = context
+                .app_sync_repository()
+                .clear_all_min_snapshot_created_at()
+                .await;
+            #[cfg(feature = "device-sync")]
+            context
+                .device_sync_runtime()
+                .ensure_background_stopped()
+                .await;
+        })
+        .await
+        .map(|_| {
+            context.backup_scheduler.wake();
+        })
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RestoreSyncSessionResponse {
+    pub access_token: String,
+    pub refresh_token: String,
+}
+
+#[tauri::command]
+pub async fn restore_sync_session(
+    state: ConnectAccess,
+) -> Result<RestoreSyncSessionResponse, String> {
+    let context = state.context()?;
+    let access_token = context.connect_service().get_valid_access_token().await?;
+
+    let refresh_token = context
+        .secret_store
+        .get_secret(CLOUD_REFRESH_TOKEN_KEY)
+        .map_err(|e| format!("Failed to read refresh token: {}", e))?
+        .ok_or_else(|| "No sync session configured".to_string())?;
+
+    Ok(RestoreSyncSessionResponse {
+        access_token,
+        refresh_token,
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::{
+        atomic::{AtomicUsize, Ordering},
+        Arc,
+    };
+
+    #[cfg(feature = "connect-sync")]
+    use wealthfolio_connect::BrokerConnection;
+
+    #[cfg(feature = "connect-sync")]
+    fn broker_connection(status: Option<&str>, disabled: bool) -> BrokerConnection {
+        BrokerConnection {
+            id: "connection-1".to_string(),
+            brokerage: None,
+            connection_type: None,
+            status: status.map(str::to_string),
+            disabled,
+            disabled_date: None,
+            updated_at: None,
+            name: None,
+        }
+    }
+
+    #[cfg(feature = "connect-sync")]
+    #[tokio::test]
+    async fn broker_preflight_no_entitlement_skips_without_listing_connections() {
+        let list_calls = Arc::new(AtomicUsize::new(0));
+
+        let decision = prepare_post_login_broker_bootstrap(
+            true,
+            || async { Ok(false) },
+            {
+                let list_calls = Arc::clone(&list_calls);
+                move || async move {
+                    list_calls.fetch_add(1, Ordering::SeqCst);
+                    Ok(vec![broker_connection(Some("connected"), false)])
+                }
+            },
+            || Some(()),
+        )
+        .await;
+
+        assert!(matches!(
+            decision,
+            PostLoginBrokerBootstrapDecision::Skip(PostLoginBootstrapReason::NotEntitled)
+        ));
+        assert_eq!(list_calls.load(Ordering::SeqCst), 0);
+    }
+
+    #[cfg(feature = "connect-sync")]
+    #[tokio::test]
+    async fn broker_preflight_zero_connections_skips_without_starting() {
+        let start_calls = Arc::new(AtomicUsize::new(0));
+
+        let decision = prepare_post_login_broker_bootstrap(
+            true,
+            || async { Ok(true) },
+            || async { Ok(vec![]) },
+            {
+                let start_calls = Arc::clone(&start_calls);
+                move || {
+                    start_calls.fetch_add(1, Ordering::SeqCst);
+                    Some(())
+                }
+            },
+        )
+        .await;
+
+        assert!(matches!(
+            decision,
+            PostLoginBrokerBootstrapDecision::Skip(PostLoginBootstrapReason::NoConnections)
+        ));
+        assert_eq!(start_calls.load(Ordering::SeqCst), 0);
+    }
+
+    #[cfg(feature = "connect-sync")]
+    #[tokio::test]
+    async fn broker_preflight_requires_active_usable_connection() {
+        let decision = prepare_post_login_broker_bootstrap(
+            true,
+            || async { Ok(true) },
+            || async {
+                Ok(vec![
+                    broker_connection(Some("disconnected"), false),
+                    broker_connection(Some("connected"), true),
+                    broker_connection(None, false),
+                ])
+            },
+            || Some(()),
+        )
+        .await;
+
+        assert!(matches!(
+            decision,
+            PostLoginBrokerBootstrapDecision::Skip(PostLoginBootstrapReason::NoConnections)
+        ));
+    }
+
+    #[cfg(feature = "connect-sync")]
+    #[tokio::test]
+    async fn broker_preflight_active_connection_starts() {
+        let decision = prepare_post_login_broker_bootstrap(
+            true,
+            || async { Ok(true) },
+            || async { Ok(vec![broker_connection(Some("connected"), false)]) },
+            || Some("guard"),
+        )
+        .await;
+
+        assert!(matches!(
+            decision,
+            PostLoginBrokerBootstrapDecision::Start("guard")
+        ));
+    }
+
+    #[cfg(feature = "connect-sync")]
+    #[tokio::test]
+    async fn broker_preflight_already_running_skips() {
+        let decision = prepare_post_login_broker_bootstrap(
+            true,
+            || async { Ok(true) },
+            || async { Ok(vec![broker_connection(Some("connected"), false)]) },
+            || None::<()>,
+        )
+        .await;
+
+        assert!(matches!(
+            decision,
+            PostLoginBrokerBootstrapDecision::Skip(PostLoginBootstrapReason::AlreadyRunning)
+        ));
+    }
+
+    #[cfg(feature = "device-sync")]
+    #[tokio::test]
+    async fn device_preflight_not_enrolled_skips_without_remote_state() {
+        let remote_calls = Arc::new(AtomicUsize::new(0));
+
+        let decision = prepare_post_login_device_bootstrap(false, || async { false }, {
+            let remote_calls = Arc::clone(&remote_calls);
+            move || async move {
+                remote_calls.fetch_add(1, Ordering::SeqCst);
+                Ok(SyncState::Ready)
+            }
+        })
+        .await;
+
+        assert!(matches!(
+            decision,
+            PostLoginDeviceBootstrapDecision::Skip(PostLoginBootstrapReason::NotEnrolled)
+        ));
+        assert_eq!(remote_calls.load(Ordering::SeqCst), 0);
+    }
+
+    #[cfg(feature = "device-sync")]
+    #[tokio::test]
+    async fn device_preflight_already_running_skips_without_remote_state() {
+        let remote_calls = Arc::new(AtomicUsize::new(0));
+
+        let decision = prepare_post_login_device_bootstrap(true, || async { true }, {
+            let remote_calls = Arc::clone(&remote_calls);
+            move || async move {
+                remote_calls.fetch_add(1, Ordering::SeqCst);
+                Ok(SyncState::Ready)
+            }
+        })
+        .await;
+
+        assert!(matches!(
+            decision,
+            PostLoginDeviceBootstrapDecision::Skip(PostLoginBootstrapReason::AlreadyRunning)
+        ));
+        assert_eq!(remote_calls.load(Ordering::SeqCst), 0);
+    }
+
+    #[cfg(feature = "device-sync")]
+    #[tokio::test]
+    async fn device_preflight_not_ready_skips() {
+        let decision = prepare_post_login_device_bootstrap(
+            true,
+            || async { false },
+            || async { Ok(SyncState::Registered) },
+        )
+        .await;
+
+        assert!(matches!(
+            decision,
+            PostLoginDeviceBootstrapDecision::Skip(PostLoginBootstrapReason::NotReady)
+        ));
+    }
+
+    #[cfg(feature = "device-sync")]
+    #[tokio::test]
+    async fn device_preflight_ready_starts_background() {
+        let decision = prepare_post_login_device_bootstrap(
+            true,
+            || async { false },
+            || async { Ok(SyncState::Ready) },
+        )
+        .await;
+
+        assert!(matches!(
+            decision,
+            PostLoginDeviceBootstrapDecision::StartBackground
+        ));
+    }
+}

@@ -1,0 +1,14 @@
+{
+  "identifier": "ios-mobile-share-capability",
+  "description": "iOS mobile share permissions",
+  "local": true,
+  "windows": [
+    "main"
+  ],
+  "platforms": [
+    "iOS"
+  ],
+  "permissions": [
+    "mobile-share:default"
+  ]
+}

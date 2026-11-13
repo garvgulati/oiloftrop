@@ -1,0 +1,285 @@
+{
+  "section": {
+    "deviceSync": "设备同步",
+    "connectedDevices": "已连接设备",
+    "otherConnectedDevices": "其他已连接设备",
+    "manageDevices": "管理设备",
+    "options": "选项",
+    "deviceActions": "设备操作"
+  },
+  "setup": {
+    "cardDescription": "在您的所有设备之间安全地同步数据。",
+    "connectToSync": "连接此设备以同步",
+    "keepInSync": "让您的设备保持同步",
+    "foundOtherDevices": "在您的账户上发现了其他已连接设备。继续以连接此设备。",
+    "encryptedInfo": "您的数据经过端到端加密。只有您的设备才能读取。",
+    "morePreview": "+{{count}} 个",
+    "settingUp": "正在设置...",
+    "connectThisDevice": "连接此设备",
+    "enableDeviceSync": "启用设备同步",
+    "morePreview_other": "+{{count}} 个"
+  },
+  "status": {
+    "syncError": "同步错误",
+    "syncPaused": "同步已暂停",
+    "synced": "已同步",
+    "syncing": "同步中",
+    "connected": "已连接",
+    "needsSetup": "需要设置",
+    "revoked": "已撤销",
+    "notConnected": "未连接",
+    "online": "在线",
+    "never": "从未",
+    "minutesAgo": "{{count}}分钟前",
+    "hoursAgo": "{{count}}小时前",
+    "daysAgo": "{{count}}天前",
+    "thisDevice": "此设备",
+    "thisDeviceSuffix": "· 此设备",
+    "minutesAgo_other": "{{count}}分钟前",
+    "hoursAgo_other": "{{count}}小时前",
+    "daysAgo_other": "{{count}}天前"
+  },
+  "engine": {
+    "pauseSync": "暂停同步",
+    "resumeSync": "恢复同步",
+    "updating": "正在更新...",
+    "backgroundPaused": "后台同步已暂停",
+    "backgroundResumed": "后台同步已恢复",
+    "updateFailed": "更新后台同步失败"
+  },
+  "errorState": {
+    "failedToInitialize": "初始化设备同步失败。",
+    "initializationFailed": "初始化失败",
+    "failedToLoadDevices": "加载设备失败",
+    "tryRefreshing": "请尝试刷新。"
+  },
+  "stale": {
+    "keysNeedUpdating": "密钥需要更新",
+    "keysNeedUpdatingDescription": "另一台设备上的安全设置已更改。请重新连接此设备以继续同步。",
+    "updateThisDevice": "更新此设备"
+  },
+  "orphaned": {
+    "restoreTitle": "使用此设备恢复同步",
+    "restoreDescription": "没有其他已连接设备可用。我们将使用此设备上已有的数据重新启动同步。",
+    "confirmDescription": "我们将使用此设备上已有的数据重新启动同步。",
+    "restarting": "正在重新启动..."
+  },
+  "untrusted": {
+    "notConnectedYet": "此设备尚未连接",
+    "enterCodeFromDevices_one": "输入您 {{count}} 台其他已连接设备中某一台上的代码。",
+    "enterCodeFromDevices_other": "输入您 {{count}} 台其他已连接设备中某一台上的代码。",
+    "enterCodeGeneric": "输入您其他已连接设备上的代码以同步您的数据。",
+    "connectThisDevice": "连接此设备",
+    "connectToStartSyncing": "连接此设备以开始同步。"
+  },
+  "connect": {
+    "connectAnotherDevice": "连接另一台设备",
+    "connectThisDevice": "连接此设备",
+    "pair": "配对",
+    "unpair": "取消配对",
+    "revoke": "撤销",
+    "rename": "重命名",
+    "disconnect": "断开连接"
+  },
+  "waitingSnapshot": {
+    "otherDeviceFinishing": "您的另一台设备仍在完成设置。",
+    "setupAlmostDone": "您的设置即将完成。",
+    "trustedHint": "您可以现在加快进度,或稍等,我们将在后台自动继续。",
+    "untrustedHint": "请先在您的另一台已连接设备上完成设置。此页面将自动更新。",
+    "checking": "正在检查...",
+    "checkAgain": "再次检查",
+    "preparing": "正在准备...",
+    "speedUpSetup": "加快设置"
+  },
+  "bootstrap": {
+    "couldNotRetryTitle": "无法重试同步"
+  },
+  "snapshot": {
+    "uploadedTitle": "快照已上传",
+    "uploadedDescription": "新连接的设备现在可以从此快照完成同步。",
+    "skippedTitle": "已跳过快照上传",
+    "cancelledTitle": "快照上传已取消",
+    "resultTitle": "快照上传结果",
+    "failedTitle": "快照上传失败"
+  },
+  "reinit": {
+    "title": "从此设备重新设置同步?",
+    "description": "我们将保留此设备上的数据并用它来重新启动同步。其他已连接设备可能需要重新连接。",
+    "notNow": "暂不",
+    "continue": "继续"
+  },
+  "recovery": {
+    "title": "重新设置此设备",
+    "description": "此设备的同步已关闭。重新设置以在您的各设备间保持数据最新。",
+    "notNow": "暂不",
+    "settingUp": "正在设置...",
+    "setUpAgain": "重新设置此设备"
+  },
+  "disconnectDialog": {
+    "title": "断开此设备的连接?",
+    "description": "这将从此设备移除同步。您可以稍后重新设置。",
+    "disconnecting": "正在断开连接...",
+    "disconnect": "断开连接"
+  },
+  "unpairDialog": {
+    "titleLast": "取消配对您的最后一台设备?",
+    "title": "取消配对设备?",
+    "descriptionLast": "这是您唯一已连接的设备。您需要重新连接一台设备才能继续同步您的数据。",
+    "description": "这将从您的账户中移除“{{name}}”。该设备需要重新连接才能同步数据。",
+    "unpairing": "正在取消配对...",
+    "unpair": "取消配对"
+  },
+  "toasts": {
+    "reinitFailed": "重新初始化同步失败",
+    "disconnectFailed": "断开连接失败",
+    "unpairFailed": "取消配对设备失败"
+  },
+  "pairing": {
+    "connectThisDeviceTitle": "连接此设备",
+    "enterCodeDescription": "输入您其他已连接设备上的代码",
+    "connectAnotherTitle": "连接另一台设备",
+    "scanOrEnterDescription": "在您的另一台设备上扫描或输入此代码",
+    "gettingReadyTitle": "正在准备此设备...",
+    "gettingReadyDescription": "这只需片刻。",
+    "prepareFailed": "我们无法完成此设备的准备。",
+    "verifySecurityCode": "验证安全码",
+    "transferringData": "正在传输您的数据",
+    "transferringDataDescription": "正在为新设备加密您的数据副本。这可能需要一分钟。",
+    "preparingData": "正在准备数据",
+    "preparingDataDescription": "连接已确认。数据准备期间，请在两台设备上保持 Wealthfolio 打开。",
+    "securingConnection": "正在保护连接",
+    "securingConnectionDescription": "正在与另一台设备交换加密密钥。"
+  },
+  "displayCode": {
+    "generating": "正在生成代码",
+    "copyCode": "复制代码",
+    "copied": "已复制",
+    "expiresIn": "{{time}} 后过期",
+    "expiredTitle": "此代码已过期",
+    "expiredDescription": "为保证配对安全，代码仅在几分钟内有效。请获取新代码以继续。",
+    "newCode": "获取新代码"
+  },
+  "enterCode": {
+    "openingCamera": "正在打开相机...",
+    "scanQrCode": "扫描二维码",
+    "or": "或",
+    "paste": "粘贴",
+    "connecting": "正在连接...",
+    "connect": "连接",
+    "scanInstructions": "将二维码对准框内。",
+    "cameraOpenError": "无法打开相机，请重试。",
+    "cameraCloseError": "无法关闭相机，请重试。",
+    "cameraUnavailable": "没有可用的相机。请使用实体设备扫描，或在下方输入配对码。",
+    "scanHint": "将摄像头对准另一台设备上的代码。",
+    "codeLabel": "配对代码"
+  },
+  "sas": {
+    "description": "请确认另一台设备显示相同的代码，以防他人连接。",
+    "codesMatch": "代码一致",
+    "codesDontMatch": "不一致",
+    "waitingDescription": "请确认另一台设备显示此代码，然后在该设备上确认。",
+    "mismatchTitle": "配对已停止",
+    "mismatchDescription": "代码不一致，因此未共享任何内容。请使用新代码重试。"
+  },
+  "waiting": {
+    "waitingForConfirmation": "正在等待确认..."
+  },
+  "result": {
+    "allSet": "全部就绪!",
+    "connectedSuccessfully": "设备连接成功",
+    "done": "完成",
+    "connectionFailed": "连接失败",
+    "tryAgain": "重试",
+    "devicesConnected": "设备已连接",
+    "finishOnOtherDevice": "请在另一台设备上完成设置。数据就绪后，它会显示“就绪”。"
+  },
+  "restore": {
+    "dialogTitle": "完成此设备的设置",
+    "transferring": {
+      "title": "正在传输您的数据",
+      "description": "正在下载并检查来自另一台设备的加密副本。"
+    },
+    "waiting": {
+      "title": "正在等待最新副本",
+      "description": "最新的加密副本尚不可用。准备就绪后，设置将自动继续。"
+    },
+    "consent": {
+      "title": "要替换此配置文件中的数据吗？",
+      "titleNamed": "要替换“{{profile}}”中的数据吗？",
+      "description": "另一台设备的数据将替换此设备上的数据。",
+      "descriptionDated": "另一台设备的数据（复制于 {{date}}）将替换此设备上的数据。",
+      "replace": "替换数据",
+      "backupLabel": "先备份此配置文件",
+      "backupAndReplace": "备份并替换",
+      "descriptionEmpty": "另一台设备的投资组合为空。继续将用该空投资组合替换此设备上的投资组合。"
+    },
+    "backingUp": {
+      "title": "正在备份此配置文件",
+      "description": "正在替换前保存此配置文件的副本。"
+    },
+    "replacing": {
+      "title": "正在替换此设备上的数据",
+      "description": "正在应用另一台设备的数据。"
+    },
+    "ready": {
+      "title": "就绪",
+      "description": "此设备已设置完成并保持同步。"
+    },
+    "cancelled": {
+      "title": "设置已取消",
+      "description": "未替换任何内容。您可以随时完成设置。"
+    },
+    "cancelSetup": "取消设置",
+    "hide": "隐藏",
+    "continueInBackground": "在后台继续",
+    "tryAgain": "重试",
+    "startAgain": "重新开始",
+    "finishSetup": "完成设置",
+    "retryHint": {
+      "transfer": "未替换任何内容。您可以重试传输。",
+      "consent": "未替换任何内容。重试时会再次请求您的批准。",
+      "new_attempt": "未替换任何内容。请重新开始，以使用另一台设备的最新副本。"
+    },
+    "errors": {
+      "SUBSCRIPTION_REQUIRED": "设备同步需要有效的订阅",
+      "DEVICE_NOT_READY": "此设备尚未准备好同步",
+      "SNAPSHOT_WAIT_TIMED_OUT": "未能在规定时间内获取最新副本",
+      "SNAPSHOT_UNAVAILABLE": "另一台设备的副本已不可用",
+      "SNAPSHOT_SCHEMA_NEWER": "请更新应用以完成设置",
+      "SNAPSHOT_INVALID": "无法验证传输的数据",
+      "TRANSFER_FAILED": "传输未完成",
+      "BACKUP_FAILED": "备份未完成",
+      "RESTORE_FAILED": "无法替换数据"
+    },
+    "banner": {
+      "title": "此设备的设置尚未完成",
+      "running": "设置正在后台继续。",
+      "needsApproval": "需要您的批准才能替换此配置文件的数据。",
+      "failed": "设置在完成前已停止。",
+      "cancelled": "设置已取消。准备好后请完成设置。",
+      "show": "显示进度"
+    }
+  },
+  "errors": {},
+  "wizard": {
+    "progressLabel": "设置进度",
+    "steps": {
+      "connect": "连接",
+      "transfer": "传输",
+      "download": "下载",
+      "apply": "应用",
+      "done": "完成"
+    },
+    "encryptedNote": "端到端加密。只有您的设备可以读取您的数据。",
+    "backgroundNote": "您可以关闭此窗口，设置将在后台继续。",
+    "details": {
+      "encrypt": "加密您的数据",
+      "upload": "上传加密副本",
+      "sendKeys": "将密钥发送到新设备",
+      "waitForUpload": "等待最新副本",
+      "downloadAndVerify": "下载并验证加密副本",
+      "replace": "替换此设备上的数据",
+      "backup": "备份此配置文件"
+    }
+  }
+}

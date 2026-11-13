@@ -1,0 +1,103 @@
+# Wealthfolio - Production Docker Compose
+#
+# Usage: docker compose --env-file .env.docker up -d
+# Reverse proxy overlay: docker compose --env-file .env.docker -f compose.yml -f compose.proxy.yml up -d
+# Dev overlay: docker compose --env-file .env.docker -f compose.yml -f compose.dev.yml up
+#
+# Publishes port 8088 for direct browser access.
+
+services:
+  wealthfolio:
+    image: wealthfolio/wealthfolio:latest
+    container_name: wealthfolio
+    restart: unless-stopped
+    ports:
+      - "${WF_PORT:-8088}:8088"
+    volumes:
+      - wealthfolio-data:/data
+    environment:
+      WF_LISTEN_ADDR: "0.0.0.0:8088"
+      # Optional installation root; empty uses the database's parent directory.
+      WF_DATA_DIR: "${WF_DATA_DIR:-}"
+      # Preserve the legacy filename by default and honor an explicitly empty path.
+      WF_DB_PATH: "${WF_DB_PATH-/data/wealthfolio.db}"
+      # Required — generate with: openssl rand -base64 32
+      WF_SECRET_KEY: "${WF_SECRET_KEY:-}"
+      # Alternative: path inside the container to a separately mounted secret.
+      WF_SECRET_KEY_FILE: "${WF_SECRET_KEY_FILE:-}"
+      # Startup requirement; convert existing databases offline before enabling.
+      WF_DB_REQUIRE_ENCRYPTION: "${WF_DB_REQUIRE_ENCRYPTION:-0}"
+
+      # ── Authentication ────────────────────────────────────────────────
+      # Required when listening on 0.0.0.0 (the default for Docker).
+      # Provide an Argon2id PHC hash of your password.
+      #
+      # IMPORTANT — Docker Compose interpolates "$" in .env files and YAML:
+      #   .env file  → WF_AUTH_PASSWORD_HASH='$argon2id$v=19$...'  (single quotes)
+      #   .env file  → WF_AUTH_PASSWORD_HASH=$$argon2id$$v=19$$...  (double every $)
+      #   YAML inline → WF_AUTH_PASSWORD_HASH: '$$argon2id$$v=19$$...'  (double every $)
+      #
+      # Generate a hash:
+      #   printf 'your-password' | argon2 yoursalt16chars! -id -e
+      #
+      # If a reverse proxy handles auth instead, set WF_AUTH_REQUIRED: "false"
+      # and leave WF_AUTH_PASSWORD_HASH empty.
+      WF_AUTH_PASSWORD_HASH: "${WF_AUTH_PASSWORD_HASH:-}"
+      WF_AUTH_TOKEN_TTL_MINUTES: "${WF_AUTH_TOKEN_TTL_MINUTES:-60}"
+      # Set to "false" to skip the auth requirement (e.g. reverse proxy handles auth)
+      # WF_AUTH_REQUIRED: "true"
+
+      # ── OIDC / SSO (optional) ─────────────────────────────────────────
+      # Sign in via any OpenID Connect provider (Authentik, PocketID, Authelia, …).
+      # Works alongside or instead of WF_AUTH_PASSWORD_HASH; enabled when both the
+      # issuer URL and client id are set. Redirect URL must be registered in the IdP.
+      WF_OIDC_ISSUER_URL: "${WF_OIDC_ISSUER_URL:-}"
+      WF_OIDC_CLIENT_ID: "${WF_OIDC_CLIENT_ID:-}"
+      WF_OIDC_CLIENT_SECRET: "${WF_OIDC_CLIENT_SECRET:-}"
+      WF_OIDC_REDIRECT_URL: "${WF_OIDC_REDIRECT_URL:-}"
+      # Optional space-separated scopes (default: "openid email profile")
+      WF_OIDC_SCOPES: "${WF_OIDC_SCOPES:-}"
+      # Allowlist (comma-separated). With NEITHER set the server refuses to start
+      # unless WF_OIDC_ALLOW_ANY=true is set — a missing allowlist must not silently
+      # grant every IdP user access.
+      WF_OIDC_ALLOWED_EMAILS: "${WF_OIDC_ALLOWED_EMAILS:-}"
+      WF_OIDC_ALLOWED_SUBS: "${WF_OIDC_ALLOWED_SUBS:-}"
+      # Set "true" to allow ANY IdP-authenticated user when no allowlist is set
+      # (only safe on a dedicated single-user IdP).
+      WF_OIDC_ALLOW_ANY: "${WF_OIDC_ALLOW_ANY:-}"
+      # Logout ends the IdP session too when supported (RP-Initiated Logout). To return
+      # to the app afterward, set this AND register it in the IdP; otherwise omit it.
+      WF_OIDC_POST_LOGOUT_REDIRECT_URL: "${WF_OIDC_POST_LOGOUT_REDIRECT_URL:-}"
+      # Set to "false" to force local-only logout even when the IdP supports RP-Initiated Logout.
+      WF_OIDC_RP_LOGOUT: "${WF_OIDC_RP_LOGOUT:-}"
+
+      # ── AI Agent Access / MCP (optional) ────────────────────────────────
+      # Requires Wealthfolio authentication via password or OIDC.
+      WF_MCP_ENABLED: "${WF_MCP_ENABLED:-false}"
+      WF_MCP_AUDIT_ENABLED: "${WF_MCP_AUDIT_ENABLED:-true}"
+
+      # Required when auth is enabled — set to your app's origin, e.g. https://wealthfolio.example.com
+      WF_CORS_ALLOW_ORIGINS: "${WF_CORS_ALLOW_ORIGINS:-}"
+      WF_REQUEST_TIMEOUT_MS: "${WF_REQUEST_TIMEOUT_MS:-30000}"
+    healthcheck:
+      test:
+        ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:8088/api/v1/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:size=64M
+
+volumes:
+  wealthfolio-data:
+    driver: local

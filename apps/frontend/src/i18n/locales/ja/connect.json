@@ -1,0 +1,322 @@
+{
+  "opensInBrowser": "ブラウザで開きます",
+  "page": {
+    "title": "同期と連携",
+    "subtitle": "すべてのデバイスを一元管理。",
+    "subtitleWithBrokers": "証券会社とデバイスを一元管理。",
+    "brokerages": "証券会社",
+    "devices": "デバイス",
+    "recentActivity": "最近の更新",
+    "manage": "管理",
+    "timeAgo": "{{time}}前",
+    "noBrokeragesConnected": "連携中の証券会社はありません",
+    "noBrokeragesDescription": "証券会社を連携すると、口座の同期を開始できます。",
+    "noDevicesSyncing": "同期中のデバイスはありません",
+    "noDevicesDescription": "設定でデバイス同期を有効にすると、複数のデバイス間でデータを同期できます。",
+    "noActivity": "更新はまだありません",
+    "noActivityDescription": "データの同期が始まると、ここに更新内容が表示されます。",
+    "showMore_one": "さらに{{count}}件を表示",
+    "showMore_other": "さらに{{count}}件を表示",
+    "showLess": "表示を減らす"
+  },
+  "emptyState": {
+    "optional": "任意",
+    "subtitle": "データのプライバシーを守りながら、証券会社を自動で同期します。",
+    "getStarted": "Connectを始める",
+    "loginToAccount": "アカウントにログイン",
+    "learnMore": "Connectについて詳しく見る",
+    "features": {
+      "brokerageSync": {
+        "title": "接続された口座",
+        "description": "証券会社の取引を自動的に同期。"
+      },
+      "deviceSync": {
+        "title": "デバイス同期とバックアップ",
+        "description": "エンドツーエンド暗号化による同期と自動クラウドバックアップ。"
+      },
+      "householdView": {
+        "title": "家族のポートフォリオ",
+        "description": "家族の投資を共有ビューで確認。"
+      }
+    }
+  },
+  "flow": {
+    "aggregatorExample": "（例：SnapTrade）",
+    "yourDevice": "お使いのデバイス",
+    "localDatabase": "ローカルデータベース",
+    "dataStaysHere": "データはここに保存されます",
+    "aggregators": "アグリゲーター",
+    "brokerages": "証券会社",
+    "banks": "銀行",
+    "crypto": "暗号資産"
+  },
+  "account": {
+    "userAvatar": "ユーザーアバター",
+    "userFallback": "ユーザー",
+    "active": "有効",
+    "signOut": "サインアウト",
+    "signOutTitle": "Wealthfolio Connectからサインアウトしますか?",
+    "signOutMessage": "同期済みの証券口座にアクセスするには、再度サインインが必要です。ローカルのデータには影響しません。",
+    "signOutConfirm": "サインアウト",
+    "signingOut": "サインアウトしています..."
+  },
+  "accounts": {
+    "title": "口座",
+    "manage": "口座を管理",
+    "accountFallback": "口座",
+    "platformFallback": "プラットフォーム",
+    "brokerFallback": "証券会社",
+    "paper": "デモ",
+    "shared": "共有",
+    "sharedBy": "{{name}}さんが共有",
+    "syncEnabled": "同期有効",
+    "excludedFromSync": "同期対象外",
+    "noDataYet": "データがありません",
+    "dataAsOf": "{{date}}時点のデータ",
+    "emptyTitle": "同期済みの口座はまだありません",
+    "emptyDescription": "証券会社を連携すると、口座の同期を開始できます。",
+    "needsSetup": "要設定"
+  },
+  "connections": {
+    "title": "証券会社の連携",
+    "manage": "連携を管理",
+    "empty": "証券会社の連携はまだありません",
+    "connectBroker": "証券会社を連携",
+    "unknownBroker": "不明な証券会社",
+    "unknown": "不明",
+    "connected": "接続済み",
+    "disconnected": "接続解除",
+    "reconnect": "再接続",
+    "noAccountsFound": "口座が見つかりません",
+    "allAccountsExcluded": "すべての口座が同期対象外です",
+    "accountsSyncing_one": "{{count}}件の口座を同期中",
+    "accountsSyncing_other": "{{count}}件の口座を同期中",
+    "partialSyncing_one": "{{total}}件中{{syncing}}件の口座を同期中 · {{excluded}}件を除外",
+    "partialSyncing_other": "{{total}}件中{{syncing}}件の口座を同期中 · {{excluded}}件を除外",
+    "accountCount_one": "{{count}}件の口座",
+    "accountCount_other": "{{count}}件の口座",
+    "excludedCount_one": "{{count}}件を除外",
+    "excludedCount_other": "{{count}}件を除外"
+  },
+  "sync": {
+    "syncNow": "今すぐ同期",
+    "sync": "同期",
+    "syncAll": "すべて同期",
+    "syncingShort": "同期中...",
+    "statusTitle": "同期ステータス",
+    "syncingBrokerData": "証券会社のデータを同期しています...",
+    "startFailed": "同期を開始できませんでした: {{error}}",
+    "needAttention_one": "{{count}}件の口座に対応が必要です",
+    "needAttention_other": "{{count}}件の口座に対応が必要です"
+  },
+  "status": {
+    "upToDate": "最新",
+    "syncing": "同期中",
+    "syncingEllipsis": "同期中...",
+    "needsReview": "要確認",
+    "failed": "失敗",
+    "notConnected": "未接続",
+    "lastSynced": "最終同期 {{time}}",
+    "neverSynced": "同期履歴なし"
+  },
+  "runStatus": {
+    "running": "実行中",
+    "applied": "反映済み",
+    "needsReview": "要確認",
+    "failed": "失敗",
+    "cancelled": "キャンセル"
+  },
+  "syncRuns": {
+    "title": "最近の同期実行",
+    "empty": "同期の実行履歴はまだありません。",
+    "warningsCount_one": "{{count}}件の警告",
+    "warningsCount_other": "{{count}}件の警告",
+    "fetched": "取得",
+    "inserted": "追加",
+    "updated": "更新",
+    "skipped": "スキップ",
+    "warningsLabel": "警告:",
+    "andMore": "...他{{count}}件",
+    "reviewActivities": "取引を確認",
+    "duration": "所要時間:",
+    "inProgress": "実行中...",
+    "andMore_other": "...他{{count}}件"
+  },
+  "syncHistory": {
+    "title": "同期履歴",
+    "success": "成功",
+    "review": "要確認",
+    "emptyTitle": "同期の実行履歴はまだありません",
+    "emptyDescription": "初回の同期後、ここに同期履歴が表示されます",
+    "runCount_one": "{{count}}件の実行",
+    "runCount_other": "{{count}}件の実行",
+    "loadMore": "さらに読み込む",
+    "lessThanOneSecond": "1秒未満",
+    "new": "新規",
+    "updated": "更新",
+    "skipped": "スキップ",
+    "warningsCount_one": "{{count}}件の警告",
+    "warningsCount_other": "{{count}}件の警告",
+    "andMore": "他{{count}}件",
+    "andMore_other": "他{{count}}件"
+  },
+  "activity": {
+    "syncingData": "データを同期しています...",
+    "somethingWentWrong": "問題が発生しました",
+    "upToDate": "すべて最新です",
+    "itemsNeedReview_one": "{{count}}件の項目に確認が必要です",
+    "itemsNeedReview_other": "{{count}}件の項目に確認が必要です",
+    "newItems": {
+      "transaction_one": "新しい取引{{count}}件",
+      "transaction_other": "新しい取引{{count}}件",
+      "position_one": "新しいポジション{{count}}件",
+      "position_other": "新しいポジション{{count}}件"
+    },
+    "updatedItems": {
+      "transaction_one": "取引{{count}}件を更新",
+      "transaction_other": "取引{{count}}件を更新",
+      "position_one": "ポジション{{count}}件を更新",
+      "position_other": "ポジション{{count}}件を更新"
+    },
+    "removedItems": {
+      "transaction_one": "取引{{count}}件を削除",
+      "transaction_other": "取引{{count}}件を削除",
+      "position_one": "ポジション{{count}}件を削除",
+      "position_other": "ポジション{{count}}件を削除"
+    }
+  },
+  "attention": {
+    "title": "証券会社の同期に対応が必要です",
+    "description_one": "{{count}}件の口座で再試行または証券会社側の確認が必要です。",
+    "description_other": "{{count}}件の口座で再試行または証券会社側の確認が必要です。",
+    "heading": "対応が必要",
+    "connectionLost": "接続が切れました",
+    "accountsNotSyncing_one": "{{count}}件の口座が同期されていません",
+    "accountsNotSyncing_other": "{{count}}件の口座が同期されていません",
+    "syncFailed": "前回の同期に失敗しました"
+  },
+  "setup": {
+    "newAccountsTitle": "新しい口座の設定が必要です",
+    "newAccountsDescription_one": "同期を開始する前に、{{count}}件の口座で簡単な設定が必要です。",
+    "newAccountsDescription_other": "同期を開始する前に、{{count}}件の口座で簡単な設定が必要です。",
+    "reviewAccounts": "口座を確認",
+    "setUp": "設定"
+  },
+  "devices": {
+    "thisDevice": "このデバイス",
+    "activeNow": "現在利用中",
+    "lastSeen": "最終接続 {{time}}",
+    "online": "オンライン",
+    "never": "なし",
+    "showInactive_one": "非アクティブなデバイス{{count}}台を表示",
+    "showInactive_other": "非アクティブなデバイス{{count}}台を表示",
+    "hideInactive": "非アクティブなデバイスを隠す",
+    "platforms": {
+      "server": "サーバー",
+      "web": "Web"
+    }
+  },
+  "deviceStatus": {
+    "syncError": "同期エラー",
+    "syncPaused": "同期停止中",
+    "upToDate": "最新",
+    "syncing": "同期中"
+  },
+  "serviceUnavailable": {
+    "title": "サービスを一時的にご利用いただけません",
+    "description": "Wealthfolio Connectに接続できません。一時的な問題のため、しばらくすると解消される見込みです。",
+    "retrying": "再試行しています...",
+    "tryAgain": "再試行"
+  },
+  "upgrade": {
+    "title": "アップグレードして証券口座を同期",
+    "description": "証券口座を連携すると、ポートフォリオを自動で同期できます。",
+    "button": "アップグレード"
+  },
+  "privacy": {
+    "footnote": "Wealthfolio Connectは証券会社のログイン情報や金融データを保存しません。すべてのデータはアグリゲーター経由で安全にローカルデータベースへ同期されます。デバイス同期にはエンドツーエンド暗号化を使用しています。<privacyLink>詳しく見る</privacyLink>"
+  },
+  "providers": {
+    "continueWithGoogle": "Googleで続ける",
+    "continueWithApple": "Appleで続ける",
+    "continueWithEmail": "メールアドレスで続ける",
+    "lastUsed": "前回使用"
+  },
+  "subscription": {
+    "copySupportEmail": "サポートのメールアドレスをコピー",
+    "syncPausedTooltip": "同期は一時停止中です — 有効なサブスクリプションが必要です",
+    "syncPausedTitle": "同期は一時停止中です",
+    "syncPausedDescription": "同期には有効なサブスクリプションが必要です。ローカルデータと未同期の変更は保持されます。",
+    "comingSoon": "近日公開",
+    "getStarted": "始める",
+    "perMonthShort": "月",
+    "perYearShort": "年",
+    "savings": "月額プランより{{percent}}%お得",
+    "choosePlan": "プランを選択",
+    "choosePlanDescription": "登録すると、証券会社の同期とクラウド機能をご利用いただけます。",
+    "monthly": "月額",
+    "yearly": "年額",
+    "monthlyBilling": "月額請求",
+    "yearlyBilling": "年額請求",
+    "alreadySubscribed": "すでに登録済みですか?",
+    "connectionIssueTitle": "接続の問題",
+    "connectionIssueDescription": "アカウントに接続できません。セッションの有効期限が切れている可能性があります。",
+    "unableToLoadTitle": "プランを読み込めません",
+    "unableToLoadDescription": "現在、サブスクリプションプランを取得できませんでした。一時的な問題の可能性があります。",
+    "contactSupport": "サポートに問い合わせる",
+    "emailCopied": "メールアドレスをクリップボードにコピーしました",
+    "reconnecting": "再接続しています...",
+    "reconnect": "再接続",
+    "refreshPage": "ページを再読み込み"
+  },
+  "authCallback": {
+    "processing": "認証を処理しています...",
+    "completing": "サインインを完了しています..."
+  },
+  "authErrors": {
+    "noSessionReturned": "サインインの完了後にセッションを取得できませんでした。",
+    "completeSignInFailed": "サインインを完了できませんでした",
+    "signInFailed": "サインインに失敗しました",
+    "signUpFailed": "アカウント登録に失敗しました",
+    "confirmEmail": "メールをご確認のうえ、アカウントを認証してください。",
+    "oauthFailed": "OAuthでのサインインに失敗しました",
+    "magicLinkFailed": "マジックリンクの送信に失敗しました",
+    "invalidVerificationCode": "確認コードが正しくありません",
+    "signOutFailed": "サインアウトに失敗しました",
+    "fetchUserInfoFailed": "ユーザー情報の取得に失敗しました"
+  },
+  "newAccounts": {
+    "title": "新しい口座が見つかりました",
+    "description": "各口座のトラッキングモードを選択してください。後から変更できます。",
+    "trackingInfo": "<strong>取引ベース</strong>はすべての取引を記録し、詳細なパフォーマンス分析ができます。<strong>残高ベース</strong>はスナップショットのみを取り込むため、指標が限定されます。<docsLink>詳しく見る</docsLink>",
+    "accountName": "口座名",
+    "group": "グループ(任意)",
+    "groupPlaceholder": "例: 老後資金",
+    "trackingMode": "トラッキングモード",
+    "transactions": "取引ベース",
+    "transactionsDescription": "詳細なパフォーマンス分析",
+    "holdings": "残高ベース",
+    "holdingsDescription": "スナップショットのみ",
+    "holdingsWarning": "取引履歴がないため、パフォーマンス指標は限定されます。",
+    "notNow": "後で",
+    "saving": "保存しています...",
+    "saveAndSync": "保存して同期",
+    "configured": "口座を設定しました",
+    "configuredDescription": "選択した設定で同期を開始します...",
+    "saveFailed": "口座の保存に失敗しました"
+  },
+  "errors": {
+    "unknown": "不明なエラー"
+  },
+  "session": {
+    "restoring": "Connect を復元しています…",
+    "unavailable": "Connect は一時的に利用できません",
+    "localAvailable": "ローカルのポートフォリオは利用できます。再接続してください。"
+  },
+  "rebind": {
+    "title": "このプロフィールのConnect接続を変更しますか？",
+    "description": "別のアカウントまたは世帯に接続しようとしています。ローカルのポートフォリオデータは保持されますが、既存の証券会社との連携とデバイス同期の設定は削除されます。新しいアカウントは、このプロフィールに証券会社のデータを追加できます。必要に応じてデバイス同期を再設定してください。データを分けて管理したい場合は、新しいプロフィールを使用してください。",
+    "cancel": "キャンセル",
+    "confirm": "接続を変更"
+  }
+}

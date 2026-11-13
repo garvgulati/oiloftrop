@@ -1,0 +1,285 @@
+{
+  "section": {
+    "deviceSync": "デバイス同期",
+    "connectedDevices": "接続済みデバイス",
+    "otherConnectedDevices": "他の接続済みデバイス",
+    "manageDevices": "デバイスを管理",
+    "options": "オプション",
+    "deviceActions": "デバイスの操作"
+  },
+  "setup": {
+    "cardDescription": "すべてのデバイス間でデータを安全に同期します。",
+    "connectToSync": "このデバイスを接続して同期",
+    "keepInSync": "デバイスを同期した状態に保つ",
+    "foundOtherDevices": "アカウントに他の接続済みデバイスが見つかりました。続けてこのデバイスを接続してください。",
+    "encryptedInfo": "データはエンドツーエンドで暗号化されています。読み取れるのはご自身のデバイスだけです。",
+    "morePreview": "他{{count}}件",
+    "settingUp": "設定中...",
+    "connectThisDevice": "このデバイスを接続",
+    "enableDeviceSync": "デバイス同期を有効化",
+    "morePreview_other": "他{{count}}件"
+  },
+  "status": {
+    "syncError": "同期エラー",
+    "syncPaused": "同期を一時停止中",
+    "synced": "同期済み",
+    "syncing": "同期中",
+    "connected": "接続済み",
+    "needsSetup": "設定が必要",
+    "revoked": "取り消し済み",
+    "notConnected": "未接続",
+    "online": "オンライン",
+    "never": "なし",
+    "minutesAgo": "{{count}}分前",
+    "hoursAgo": "{{count}}時間前",
+    "daysAgo": "{{count}}日前",
+    "thisDevice": "このデバイス",
+    "thisDeviceSuffix": "· このデバイス",
+    "minutesAgo_other": "{{count}}分前",
+    "hoursAgo_other": "{{count}}時間前",
+    "daysAgo_other": "{{count}}日前"
+  },
+  "engine": {
+    "pauseSync": "同期を一時停止",
+    "resumeSync": "同期を再開",
+    "updating": "更新中...",
+    "backgroundPaused": "バックグラウンド同期を一時停止しました",
+    "backgroundResumed": "バックグラウンド同期を再開しました",
+    "updateFailed": "バックグラウンド同期の更新に失敗しました"
+  },
+  "errorState": {
+    "failedToInitialize": "デバイス同期の初期化に失敗しました。",
+    "initializationFailed": "初期化に失敗しました",
+    "failedToLoadDevices": "デバイスの読み込みに失敗しました",
+    "tryRefreshing": "画面を更新してお試しください。"
+  },
+  "stale": {
+    "keysNeedUpdating": "キーの更新が必要です",
+    "keysNeedUpdatingDescription": "他のデバイスでセキュリティ設定が変更されました。同期を続けるには、このデバイスを再接続してください。",
+    "updateThisDevice": "このデバイスを更新"
+  },
+  "orphaned": {
+    "restoreTitle": "このデバイスから同期を復元",
+    "restoreDescription": "他に利用できる接続済みデバイスがありません。このデバイスにあるデータを使って同期を再開します。",
+    "confirmDescription": "このデバイスにあるデータを使って同期を再開します。",
+    "restarting": "再開中..."
+  },
+  "untrusted": {
+    "notConnectedYet": "このデバイスはまだ接続されていません",
+    "enterCodeFromDevices_one": "他の接続済みデバイス{{count}}台のいずれかに表示されたコードを入力してください。",
+    "enterCodeFromDevices_other": "他の接続済みデバイス{{count}}台のいずれかに表示されたコードを入力してください。",
+    "enterCodeGeneric": "データを同期するには、他の接続済みデバイスに表示されたコードを入力してください。",
+    "connectThisDevice": "このデバイスを接続",
+    "connectToStartSyncing": "このデバイスを接続すると同期が始まります。"
+  },
+  "connect": {
+    "connectAnotherDevice": "別のデバイスを接続",
+    "connectThisDevice": "このデバイスを接続",
+    "pair": "ペアリング",
+    "unpair": "ペアリング解除",
+    "revoke": "取り消し",
+    "rename": "名前を変更",
+    "disconnect": "接続解除"
+  },
+  "waitingSnapshot": {
+    "otherDeviceFinishing": "他のデバイスがまだ設定を完了していません。",
+    "setupAlmostDone": "設定はもうすぐ完了します。",
+    "trustedHint": "今すぐ処理を早めることもできますし、そのままお待ちいただければバックグラウンドで自動的に続行します。",
+    "untrustedHint": "先に他の接続済みデバイスで設定を完了してください。この画面は自動的に更新されます。",
+    "checking": "確認中...",
+    "checkAgain": "もう一度確認",
+    "preparing": "準備中...",
+    "speedUpSetup": "設定を早める"
+  },
+  "bootstrap": {
+    "couldNotRetryTitle": "同期を再試行できませんでした"
+  },
+  "snapshot": {
+    "uploadedTitle": "スナップショットをアップロードしました",
+    "uploadedDescription": "新しく接続したデバイスは、このスナップショットから同期を完了できます。",
+    "skippedTitle": "スナップショットのアップロードをスキップしました",
+    "cancelledTitle": "スナップショットのアップロードをキャンセルしました",
+    "resultTitle": "スナップショットのアップロード結果",
+    "failedTitle": "スナップショットのアップロードに失敗しました"
+  },
+  "reinit": {
+    "title": "このデバイスから同期を設定し直しますか?",
+    "description": "このデバイスのデータを保持し、それを使って同期を再開します。他の接続済みデバイスは再接続が必要になる場合があります。",
+    "notNow": "後で",
+    "continue": "続ける"
+  },
+  "recovery": {
+    "title": "このデバイスを再設定",
+    "description": "このデバイスの同期は無効になっています。デバイス間でデータを最新に保つには、再設定してください。",
+    "notNow": "後で",
+    "settingUp": "設定中...",
+    "setUpAgain": "このデバイスを再設定"
+  },
+  "disconnectDialog": {
+    "title": "このデバイスの接続を解除しますか?",
+    "description": "このデバイスから同期が削除されます。後で再設定できます。",
+    "disconnecting": "接続解除中...",
+    "disconnect": "接続解除"
+  },
+  "unpairDialog": {
+    "titleLast": "最後のデバイスのペアリングを解除しますか?",
+    "title": "デバイスのペアリングを解除しますか?",
+    "descriptionLast": "これは唯一の接続済みデバイスです。データの同期を続けるには、デバイスを再接続する必要があります。",
+    "description": "アカウントから「{{name}}」を削除します。データを同期するには、このデバイスを再接続する必要があります。",
+    "unpairing": "ペアリング解除中...",
+    "unpair": "ペアリング解除"
+  },
+  "toasts": {
+    "reinitFailed": "同期の再初期化に失敗しました",
+    "disconnectFailed": "接続解除に失敗しました",
+    "unpairFailed": "デバイスのペアリング解除に失敗しました"
+  },
+  "pairing": {
+    "connectThisDeviceTitle": "このデバイスを接続",
+    "enterCodeDescription": "他の接続済みデバイスに表示されたコードを入力してください",
+    "connectAnotherTitle": "別のデバイスを接続",
+    "scanOrEnterDescription": "他のデバイスでこのコードをスキャンするか入力してください",
+    "gettingReadyTitle": "このデバイスを準備しています...",
+    "gettingReadyDescription": "少しだけお待ちください。",
+    "prepareFailed": "このデバイスの準備を完了できませんでした。",
+    "verifySecurityCode": "セキュリティコードを確認",
+    "transferringData": "データを転送しています",
+    "transferringDataDescription": "新しいデバイス用にデータのコピーを暗号化しています。1分ほどかかる場合があります。",
+    "preparingData": "データを準備しています",
+    "preparingDataDescription": "接続が確認されました。データの準備中は、両方のデバイスでWealthfolioを開いたままにしてください。",
+    "securingConnection": "接続を保護しています",
+    "securingConnectionDescription": "もう一方のデバイスと暗号化キーを交換しています。"
+  },
+  "displayCode": {
+    "generating": "コードを生成中",
+    "copyCode": "コードをコピー",
+    "copied": "コピーしました",
+    "expiresIn": "有効期限まで {{time}}",
+    "expiredTitle": "このコードの有効期限が切れました",
+    "expiredDescription": "安全のため、コードは数分間のみ有効です。続けるには新しいコードを取得してください。",
+    "newCode": "新しいコードを取得"
+  },
+  "enterCode": {
+    "openingCamera": "カメラを起動中...",
+    "scanQrCode": "QRコードをスキャン",
+    "or": "または",
+    "paste": "貼り付け",
+    "connecting": "接続中...",
+    "connect": "接続",
+    "scanInstructions": "枠内にQRコードを合わせてください。",
+    "cameraOpenError": "カメラを開けませんでした。もう一度お試しください。",
+    "cameraCloseError": "カメラを閉じられませんでした。もう一度お試しください。",
+    "cameraUnavailable": "カメラが利用できません。実機でスキャンするか、下にペアリングコードを入力してください。",
+    "scanHint": "もう一方のデバイスに表示されたコードにカメラを向けてください。",
+    "codeLabel": "ペアリングコード"
+  },
+  "sas": {
+    "description": "もう一方のデバイスに同じコードが表示されていることを確認してください。これにより第三者の接続を防ぎます。",
+    "codesMatch": "一致しています",
+    "codesDontMatch": "一致しません",
+    "waitingDescription": "もう一方のデバイスにこのコードが表示されていることを確認し、そちらで承認してください。",
+    "mismatchTitle": "ペアリングを中止しました",
+    "mismatchDescription": "コードが一致しなかったため、何も共有されていません。新しいコードでやり直してください。"
+  },
+  "waiting": {
+    "waitingForConfirmation": "確認を待っています..."
+  },
+  "result": {
+    "allSet": "準備が整いました",
+    "connectedSuccessfully": "デバイスを接続しました",
+    "done": "完了",
+    "connectionFailed": "接続に失敗しました",
+    "tryAgain": "再試行",
+    "devicesConnected": "デバイスを接続しました",
+    "finishOnOtherDevice": "もう一方のデバイスでセットアップを完了してください。データの準備ができると「完了」と表示されます。"
+  },
+  "restore": {
+    "dialogTitle": "このデバイスのセットアップを完了",
+    "transferring": {
+      "title": "データを転送しています",
+      "description": "もう一方のデバイスの暗号化されたコピーをダウンロードして確認しています。"
+    },
+    "waiting": {
+      "title": "最新のコピーを待っています",
+      "description": "最新の暗号化されたコピーはまだ利用できません。準備ができると設定が自動的に続行されます。"
+    },
+    "consent": {
+      "title": "このプロファイルのデータを置き換えますか？",
+      "titleNamed": "「{{profile}}」のデータを置き換えますか？",
+      "description": "もう一方のデバイスのデータで、このデバイスのデータを置き換えます。",
+      "descriptionDated": "もう一方のデバイスのデータ（{{date}} にコピー）で、このデバイスのデータを置き換えます。",
+      "replace": "データを置き換える",
+      "backupLabel": "先にこのプロファイルをバックアップ",
+      "backupAndReplace": "バックアップして置き換える",
+      "descriptionEmpty": "もう一方の端末のポートフォリオは空です。続行すると、この端末のポートフォリオがその空のポートフォリオに置き換わります。"
+    },
+    "backingUp": {
+      "title": "このプロファイルをバックアップしています",
+      "description": "置き換える前に、このプロファイルのコピーを保存しています。"
+    },
+    "replacing": {
+      "title": "このデバイスのデータを置き換えています",
+      "description": "もう一方のデバイスのデータを反映しています。"
+    },
+    "ready": {
+      "title": "完了",
+      "description": "このデバイスはセットアップされ、同期されています。"
+    },
+    "cancelled": {
+      "title": "セットアップはキャンセルされました",
+      "description": "何も置き換えられていません。いつでもセットアップを完了できます。"
+    },
+    "cancelSetup": "セットアップをキャンセル",
+    "hide": "非表示",
+    "continueInBackground": "バックグラウンドで続行",
+    "tryAgain": "再試行",
+    "startAgain": "最初からやり直す",
+    "finishSetup": "セットアップを完了",
+    "retryHint": {
+      "transfer": "何も置き換えられていません。転送を再試行できます。",
+      "consent": "何も置き換えられていません。再試行すると、もう一度承認を求められます。",
+      "new_attempt": "何も置き換えられていません。最初からやり直して、もう一方のデバイスの最新のコピーを使用してください。"
+    },
+    "errors": {
+      "SUBSCRIPTION_REQUIRED": "デバイス同期には有効なサブスクリプションが必要です",
+      "DEVICE_NOT_READY": "このデバイスはまだ同期の準備ができていません",
+      "SNAPSHOT_WAIT_TIMED_OUT": "制限時間内に最新のコピーを取得できませんでした",
+      "SNAPSHOT_UNAVAILABLE": "もう一方のデバイスのコピーは利用できなくなりました",
+      "SNAPSHOT_SCHEMA_NEWER": "セットアップを完了するにはアプリを更新してください",
+      "SNAPSHOT_INVALID": "転送されたデータを検証できませんでした",
+      "TRANSFER_FAILED": "転送が完了しませんでした",
+      "BACKUP_FAILED": "バックアップが完了しませんでした",
+      "RESTORE_FAILED": "データを置き換えられませんでした"
+    },
+    "banner": {
+      "title": "このデバイスのセットアップは完了していません",
+      "running": "セットアップはバックグラウンドで続行中です。",
+      "needsApproval": "このプロファイルのデータを置き換えるには承認が必要です。",
+      "failed": "セットアップは完了前に停止しました。",
+      "cancelled": "セットアップはキャンセルされました。準備ができたら完了してください。",
+      "show": "進行状況を表示"
+    }
+  },
+  "errors": {},
+  "wizard": {
+    "progressLabel": "セットアップの進行状況",
+    "steps": {
+      "connect": "接続",
+      "transfer": "転送",
+      "download": "ダウンロード",
+      "apply": "適用",
+      "done": "完了"
+    },
+    "encryptedNote": "エンドツーエンドで暗号化。データを読めるのはお使いのデバイスだけです。",
+    "backgroundNote": "このウィンドウを閉じても、セットアップはバックグラウンドで続行されます。",
+    "details": {
+      "encrypt": "データを暗号化",
+      "upload": "暗号化したコピーをアップロード",
+      "sendKeys": "新しいデバイスにキーを送信",
+      "waitForUpload": "最新のコピーを待つ",
+      "downloadAndVerify": "暗号化されたコピーをダウンロードして検証",
+      "replace": "このデバイスのデータを置き換え",
+      "backup": "このプロファイルをバックアップ"
+    }
+  }
+}

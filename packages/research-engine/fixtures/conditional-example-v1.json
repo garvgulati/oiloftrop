@@ -1,0 +1,638 @@
+{
+  "portfolio": {
+    "transactions": [],
+    "profile": null,
+    "planning": {
+      "schemaVersion": 1,
+      "baseCurrency": "USD",
+      "goalLabel": "Fictional eight-year asset goal",
+      "goalDate": "2034-10-12",
+      "goalCurrency": "USD",
+      "goalAmount": "1200",
+      "goalInTodaysMoney": false,
+      "cash": [
+        {
+          "id": "fe8e17e1-16b0-4b20-9e14-95088274c002",
+          "name": "Fictional USD pool",
+          "currency": "USD",
+          "amount": "1000",
+          "reserve": "100",
+          "date": "2026-10-12",
+          "reconciled": true
+        }
+      ],
+      "payments": [],
+      "debts": [
+        {
+          "id": "fe8e17e1-16b0-4b20-9e14-95088274c003",
+          "label": "Fictional loan",
+          "currency": "USD",
+          "balance": "200",
+          "annualInterestPct": null,
+          "repayments": [
+            {
+              "id": "fe8e17e1-16b0-4b20-9e14-95088274c004",
+              "label": "Fictional year-one repayment",
+              "currency": "USD",
+              "amount": "100",
+              "date": "2027-10-12"
+            },
+            {
+              "id": "fe8e17e1-16b0-4b20-9e14-95088274c005",
+              "label": "Fictional maturity repayment",
+              "currency": "USD",
+              "amount": "120",
+              "date": "2034-10-12"
+            }
+          ],
+          "balanceDate": "2026-10-12",
+          "cashScheduleThrough": "2034-10-12",
+          "scheduleBasis": "Educational example: USD20 accrued interest and USD100 payment in year 1; no additional interest/fees; remaining USD120 principal paid in year 8. These are fictional terms.",
+          "scheduleConfirmed": true,
+          "liabilityPath": {
+            "openingDate": "2026-10-12",
+            "principal": "200",
+            "interestDue": "0",
+            "feesDue": "0",
+            "confirmedThrough": "2034-10-12",
+            "rows": [
+              {
+                "date": "2027-10-12",
+                "interestAccrued": "20",
+                "feesAccrued": "0",
+                "capitalizedInterest": "0",
+                "capitalizedFees": "0",
+                "principalPaid": "80",
+                "interestPaid": "20",
+                "feesPaid": "0"
+              },
+              {
+                "date": "2029-10-12",
+                "interestAccrued": "0",
+                "feesAccrued": "0",
+                "capitalizedInterest": "0",
+                "capitalizedFees": "0",
+                "principalPaid": "0",
+                "interestPaid": "0",
+                "feesPaid": "0"
+              },
+              {
+                "date": "2031-10-12",
+                "interestAccrued": "0",
+                "feesAccrued": "0",
+                "capitalizedInterest": "0",
+                "capitalizedFees": "0",
+                "principalPaid": "0",
+                "interestPaid": "0",
+                "feesPaid": "0"
+              },
+              {
+                "date": "2032-10-12",
+                "interestAccrued": "0",
+                "feesAccrued": "0",
+                "capitalizedInterest": "0",
+                "capitalizedFees": "0",
+                "principalPaid": "0",
+                "interestPaid": "0",
+                "feesPaid": "0"
+              },
+              {
+                "date": "2033-10-12",
+                "interestAccrued": "0",
+                "feesAccrued": "0",
+                "capitalizedInterest": "0",
+                "capitalizedFees": "0",
+                "principalPaid": "0",
+                "interestPaid": "0",
+                "feesPaid": "0"
+              },
+              {
+                "date": "2034-10-12",
+                "interestAccrued": "0",
+                "feesAccrued": "0",
+                "capitalizedInterest": "0",
+                "capitalizedFees": "0",
+                "principalPaid": "120",
+                "interestPaid": "0",
+                "feesPaid": "0"
+              }
+            ]
+          }
+        }
+      ],
+      "cashComplete": true,
+      "paymentsComplete": true,
+      "debtsComplete": true,
+      "holdingsComplete": true,
+      "newMoneyAvailableBase": "500",
+      "canAffordToLoseBase": "500",
+      "willingToLoseBase": "500",
+      "maxDrawdownPct": "25",
+      "issuerLimitPct": "75",
+      "sectorLimitPct": "75",
+      "currencyLimitPct": "100",
+      "realHurdlePct": "0",
+      "restrictions": "",
+      "confirmedDate": "2026-10-12"
+    },
+    "holdings": [
+      {
+        "id": "fe8e17e1-16b0-4b20-9e14-95088274c001",
+        "symbol": "TEST",
+        "name": "Fictional Trial Company",
+        "market": "US",
+        "sector": "Technology",
+        "quantity": 2,
+        "cost": 100,
+        "price": 100,
+        "priceDate": "2026-10-12",
+        "identity": {
+          "schemaVersion": 1,
+          "id": "example:AAPL",
+          "issuerId": "sec:0000001234",
+          "ticker": "TEST",
+          "venue": "NASDAQ",
+          "shareClass": "Common stock",
+          "type": "ordinary_equity",
+          "currency": "USD",
+          "reportingCurrency": "USD",
+          "countryOfListing": "US",
+          "issuerDomicile": "US",
+          "sector": "Technology",
+          "sectorSource": null,
+          "issuerSource": "https://example.invalid/fictional-identity",
+          "confirmedAt": "2026-10-12",
+          "confirmation": "user_confirmed"
+        }
+      }
+    ],
+    "notes": [],
+    "fx": null,
+    "fxDate": null
+  },
+  "proposal": {
+    "schemaVersion": 1,
+    "ticker": "TEST",
+    "instrumentType": "ordinary_equity",
+    "listingCountry": "US",
+    "sectorRoute": "nonfinancial",
+    "sector": "Technology",
+    "price": "100",
+    "priceDate": "2026-10-12",
+    "budget": "100",
+    "entryFee": "1",
+    "exitFee": "1",
+    "entryFxHaircutPct": "0",
+    "costsConfirmed": true,
+    "shareIncrement": "0.001",
+    "funding": "new_money",
+    "cashAccountId": null,
+    "fundingUnencumbered": true,
+    "confirmedHoldingIds": [
+      "fe8e17e1-16b0-4b20-9e14-95088274c001"
+    ],
+    "benchmarkName": "Fictional USD cash alternative",
+    "benchmarkAnnualPct": "2",
+    "benchmarkEntryFee": "0",
+    "benchmarkExitFee": "0",
+    "alternativeType": "usd_cash",
+    "goalAssumption": null,
+    "stress": {
+      "candidateChangePct": "-50",
+      "inrPerUsd": null,
+      "holdingChanges": []
+    },
+    "minimumBenefitBase": "0",
+    "assumptions": [
+      {
+        "epsGrowthPct": "5",
+        "exitPe": "15",
+        "dividendsPerShare": "0",
+        "fxAtExit": null,
+        "inflationPct": "2",
+        "goalInflationPct": null,
+        "horizon": 1
+      },
+      {
+        "epsGrowthPct": "5",
+        "exitPe": "15",
+        "dividendsPerShare": "0",
+        "fxAtExit": null,
+        "inflationPct": "2",
+        "goalInflationPct": null,
+        "horizon": 3
+      },
+      {
+        "epsGrowthPct": "5",
+        "exitPe": "15",
+        "dividendsPerShare": "0",
+        "fxAtExit": null,
+        "inflationPct": "2",
+        "goalInflationPct": null,
+        "horizon": 5
+      },
+      {
+        "epsGrowthPct": "5",
+        "exitPe": "15",
+        "dividendsPerShare": "0",
+        "fxAtExit": null,
+        "inflationPct": "2",
+        "goalInflationPct": null,
+        "horizon": 6
+      },
+      {
+        "epsGrowthPct": "5",
+        "exitPe": "15",
+        "dividendsPerShare": "0",
+        "fxAtExit": null,
+        "inflationPct": "2",
+        "goalInflationPct": null,
+        "horizon": 7
+      },
+      {
+        "epsGrowthPct": "5",
+        "exitPe": "15",
+        "dividendsPerShare": "0",
+        "fxAtExit": null,
+        "inflationPct": "2",
+        "goalInflationPct": null,
+        "horizon": 8
+      }
+    ],
+    "withdrawalFx": [],
+    "assumptionRationale": "Explicit fictional test only. All prices, company financial data, holdings, cash, debt and forecasts are fabricated. This is not public company research or personal advice."
+  },
+  "report": {
+    "schemaVersion": 2,
+    "readerVersion": "sec-financials-3",
+    "cik": "0000001234",
+    "name": "Fictional Trial Company",
+    "tickers": [
+      "TEST"
+    ],
+    "industry": "Computers",
+    "retrievedAt": "2026-10-07T00:00:00.000Z",
+    "sourceUrls": [
+      "https://example.invalid/fictional-data"
+    ],
+    "annual": [
+      {
+        "start": "2024-01-01",
+        "end": "2024-12-31",
+        "days": 366,
+        "metrics": {
+          "revenue": {
+            "value": 1200,
+            "unit": "USD",
+            "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "start": "2024-01-01",
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "operatingIncome": {
+            "value": 180,
+            "unit": "USD",
+            "tag": "OperatingIncomeLoss",
+            "start": "2024-01-01",
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "netIncome": {
+            "value": 120,
+            "unit": "USD",
+            "tag": "NetIncomeLoss",
+            "start": "2024-01-01",
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "operatingCash": {
+            "value": 200,
+            "unit": "USD",
+            "tag": "NetCashProvidedByUsedInOperatingActivities",
+            "start": "2024-01-01",
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "capex": {
+            "value": 50,
+            "unit": "USD",
+            "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+            "start": "2024-01-01",
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "assets": {
+            "value": 2000,
+            "unit": "USD",
+            "tag": "Assets",
+            "start": null,
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "liabilities": {
+            "value": 1000,
+            "unit": "USD",
+            "tag": "Liabilities",
+            "start": null,
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "cash": null,
+          "dilutedEps": {
+            "value": 2,
+            "unit": "USD/shares",
+            "tag": "EarningsPerShareDiluted",
+            "start": "2024-01-01",
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "dilutedShares": null,
+          "currentAssets": null,
+          "currentLiabilities": null,
+          "currentLongTermDebt": null,
+          "noncurrentLongTermDebt": null,
+          "shareBasedComp": null,
+          "dividendsPaid": null,
+          "repurchases": null
+        },
+        "revenueGrowth": 19.999999999999996,
+        "netMargin": 10,
+        "freeCashFlow": 150,
+        "cashConversion": 1.6666666666666667,
+        "liabilitiesToAssets": 50,
+        "operatingMargin": 15,
+        "currentRatio": null,
+        "reportedLongTermDebt": null,
+        "dilutedShareChange": null,
+        "shareBasedCompToRevenue": null,
+        "cashAfterShareholderPayments": null
+      },
+      {
+        "start": "2023-01-01",
+        "end": "2023-12-31",
+        "days": 365,
+        "metrics": {
+          "revenue": {
+            "value": 1000,
+            "unit": "USD",
+            "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "start": "2023-01-01",
+            "end": "2023-12-31",
+            "filed": "2024-02-20",
+            "accession": "0000001234-24-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123424000001/0000001234-24-000001-index.html",
+            "acceptedAt": null
+          },
+          "operatingIncome": null,
+          "netIncome": {
+            "value": 100,
+            "unit": "USD",
+            "tag": "NetIncomeLoss",
+            "start": "2023-01-01",
+            "end": "2023-12-31",
+            "filed": "2024-02-20",
+            "accession": "0000001234-24-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123424000001/0000001234-24-000001-index.html",
+            "acceptedAt": null
+          },
+          "operatingCash": null,
+          "capex": null,
+          "assets": null,
+          "liabilities": null,
+          "cash": null,
+          "dilutedEps": null,
+          "dilutedShares": null,
+          "currentAssets": null,
+          "currentLiabilities": null,
+          "currentLongTermDebt": null,
+          "noncurrentLongTermDebt": null,
+          "shareBasedComp": null,
+          "dividendsPaid": null,
+          "repurchases": null
+        },
+        "revenueGrowth": null,
+        "netMargin": 10,
+        "freeCashFlow": null,
+        "cashConversion": null,
+        "liabilitiesToAssets": null,
+        "operatingMargin": null,
+        "currentRatio": null,
+        "reportedLongTermDebt": null,
+        "dilutedShareChange": null,
+        "shareBasedCompToRevenue": null,
+        "cashAfterShareholderPayments": null
+      }
+    ],
+    "interim": {
+      "parserVersion": "sec-interim-1",
+      "status": "unavailable",
+      "annualEnd": "2024-12-31",
+      "end": "2025-03-31",
+      "fiscalStart": "2025-01-01",
+      "quarterStart": null,
+      "priorYtdEnd": null,
+      "filing": {
+        "accession": "0000001234-25-000002",
+        "filed": "2025-05-01",
+        "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000002/0000001234-25-000002-index.html",
+        "acceptedAt": null
+      },
+      "flows": {
+        "revenue": {
+          "quarter": null,
+          "ytd": null,
+          "priorYtd": null,
+          "annual": {
+            "value": 1200,
+            "unit": "USD",
+            "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+            "start": "2024-01-01",
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "trailing": null,
+          "trailingReason": "Annual, current YTD and same-filing prior YTD evidence are all required. Missing values are not zero."
+        },
+        "operatingIncome": {
+          "quarter": null,
+          "ytd": null,
+          "priorYtd": null,
+          "annual": {
+            "value": 180,
+            "unit": "USD",
+            "tag": "OperatingIncomeLoss",
+            "start": "2024-01-01",
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "trailing": null,
+          "trailingReason": "Annual, current YTD and same-filing prior YTD evidence are all required. Missing values are not zero."
+        },
+        "netIncome": {
+          "quarter": null,
+          "ytd": null,
+          "priorYtd": null,
+          "annual": {
+            "value": 120,
+            "unit": "USD",
+            "tag": "NetIncomeLoss",
+            "start": "2024-01-01",
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "trailing": null,
+          "trailingReason": "Annual, current YTD and same-filing prior YTD evidence are all required. Missing values are not zero."
+        },
+        "operatingCash": {
+          "quarter": null,
+          "ytd": null,
+          "priorYtd": null,
+          "annual": {
+            "value": 200,
+            "unit": "USD",
+            "tag": "NetCashProvidedByUsedInOperatingActivities",
+            "start": "2024-01-01",
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "trailing": null,
+          "trailingReason": "Annual, current YTD and same-filing prior YTD evidence are all required. Missing values are not zero."
+        },
+        "capex": {
+          "quarter": null,
+          "ytd": null,
+          "priorYtd": null,
+          "annual": {
+            "value": 50,
+            "unit": "USD",
+            "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+            "start": "2024-01-01",
+            "end": "2024-12-31",
+            "filed": "2025-02-20",
+            "accession": "0000001234-25-000001",
+            "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html",
+            "acceptedAt": null
+          },
+          "trailing": null,
+          "trailingReason": "Annual, current YTD and same-filing prior YTD evidence are all required. Missing values are not zero."
+        },
+        "shareBasedComp": {
+          "quarter": null,
+          "ytd": null,
+          "priorYtd": null,
+          "annual": null,
+          "trailing": null,
+          "trailingReason": "Annual, current YTD and same-filing prior YTD evidence are all required. Missing values are not zero."
+        },
+        "dividendsPaid": {
+          "quarter": null,
+          "ytd": null,
+          "priorYtd": null,
+          "annual": null,
+          "trailing": null,
+          "trailingReason": "Annual, current YTD and same-filing prior YTD evidence are all required. Missing values are not zero."
+        },
+        "repurchases": {
+          "quarter": null,
+          "ytd": null,
+          "priorYtd": null,
+          "annual": null,
+          "trailing": null,
+          "trailingReason": "Annual, current YTD and same-filing prior YTD evidence are all required. Missing values are not zero."
+        }
+      },
+      "balance": {
+        "assets": null,
+        "liabilities": null,
+        "cash": null,
+        "currentAssets": null,
+        "currentLiabilities": null,
+        "currentLongTermDebt": null,
+        "noncurrentLongTermDebt": null
+      },
+      "warnings": [
+        "A recent 10-Q exists, but compatible standard-tag USD inputs are unavailable; the reader does not substitute an older quarter.",
+        "A unique reported quarter start could not be established; quarter amounts remain unavailable.",
+        "Only standard US-GAAP USD, whole-entity facts are read. Filing notes, accounting scope and normalisation are not independently verified.",
+        "Quarter and fiscal year-to-date amounts are separate; cumulative periods are never summed as separate quarters.",
+        "Trailing totals are conditional aggregations: latest annual plus current fiscal YTD minus comparable prior YTD from the same interim filing. Read the source statements for restatements and scope.",
+        "Trailing EPS and weighted share counts are not constructed by subtracting cumulative per-share figures. Earnings scenarios still use the explicitly labelled annual EPS.",
+        "This reader covers available recent 10-Q metadata, not complete event/news coverage or a point-in-time training dataset."
+      ]
+    },
+    "filings": [
+      {
+        "form": "10-Q",
+        "filed": "2025-05-01",
+        "reportDate": "2025-03-31",
+        "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000002/0000001234-25-000002-index.html"
+      },
+      {
+        "form": "10-K",
+        "filed": "2025-02-20",
+        "reportDate": "2024-12-31",
+        "url": "https://www.sec.gov/Archives/edgar/data/1234/000000123425000001/0000001234-25-000001-index.html"
+      }
+    ],
+    "findings": [
+      "Revenue grew 20.0% versus the preceding comparable annual period.",
+      "Reported net income was 10.0% of revenue.",
+      "Operating cash flow less cash purchases of property and equipment was positive.",
+      "Operating cash flow was 1.67 times net income. This is not a complete earnings-quality assessment.",
+      "Total liabilities were 50.0% of assets. Liabilities include obligations beyond financial debt.",
+      "Operating income was 15.0% of revenue, before the net-income effects of financing, taxes and other items."
+    ],
+    "warnings": [
+      "Reported long-term debt combines only its supported current and noncurrent components; it excludes unsupported short-term borrowing and lease categories. It is not total debt or enterprise value.",
+      "The latest supported annual period is over 18 months old. Do not treat it as current operating performance.",
+      "Unavailable for the latest annual period: Cash and cash equivalents, Weighted average diluted shares, Current assets, Current liabilities, Current portion of long-term debt, Noncurrent long-term debt, Share-based compensation, Cash dividend payments, Cash common-share repurchases. Missing values are not zero.",
+      "Annual figures exclude newer quarterly developments. Read the latest quarterly and current reports before an investment decision."
+    ],
+    "coverage": [
+      "Standard US GAAP tags, whole-entity facts and USD only.",
+      "Full-year periods of 330–400 days from 10-K and 10-K/A filings; latest disclosed value for each period.",
+      "Interim data uses the latest recent 10-Q period, with quarter, fiscal YTD and same-filing comparative YTD separated. Trailing EPS is not manufactured from cumulative EPS.",
+      "Cash-flow proxy = operating cash flow minus cash purchases of property and equipment. It is not a standardized free-cash-flow measure.",
+      "Cash after shareholder payments subtracts reported cash dividends and common-share repurchases from that proxy. It omits other investing and financing flows.",
+      "Debt, liquidity and cash-flow metrics need sector-specific interpretation, particularly for financial companies.",
+      "No stock prices, price targets, news sentiment, analyst forecasts or automated recommendations."
+    ]
+  },
+  "asOf": "2026-10-12T04:30:00.000Z"
+}

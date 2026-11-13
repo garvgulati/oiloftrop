@@ -1,0 +1,60 @@
+{
+  "identifier": "mobile-capability",
+  "description": "mobile-capability",
+  "local": true,
+  "windows": [
+    "main"
+  ],
+  "platforms": [
+    "iOS",
+    "android"
+  ],
+  "permissions": [
+    "core:default",
+    "fs:allow-open",
+    "fs:allow-read",
+    "fs:allow-write",
+    "fs:allow-read-file",
+    "fs:allow-write-file",
+    "fs:allow-read-dir",
+    "fs:allow-copy-file",
+    "fs:allow-start-accessing-security-scoped-resource",
+    "fs:allow-stop-accessing-security-scoped-resource",
+    "fs:allow-mkdir",
+    "fs:allow-remove",
+    "fs:allow-rename",
+    "fs:allow-exists",
+    "core:window:allow-start-dragging",
+    "shell:allow-open",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "dialog:default",
+    "shell:default",
+    "deep-link:default",
+    "web-auth:default",
+    "web-auth:allow-authenticate",
+    "core:app:allow-set-app-theme",
+    "core:window:allow-set-theme",
+    "core:window:allow-theme",
+    "log:default",
+    "haptics:allow-impact-feedback",
+    "haptics:allow-notification-feedback",
+    "haptics:allow-selection-feedback",
+    "haptics:allow-vibrate",
+    "barcode-scanner:allow-scan",
+    "barcode-scanner:allow-cancel",
+    "barcode-scanner:allow-check-permissions",
+    "barcode-scanner:allow-request-permissions",
+    "fs:deny-default",
+    "fs:allow-fstat",
+    {
+      "identifier": "fs:scope",
+      "deny": [
+        "$APPDATA",
+        "$APPDATA/**",
+        "$APPLOCALDATA",
+        "$APPLOCALDATA/**"
+      ]
+    }
+  ]
+}

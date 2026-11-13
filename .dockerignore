@@ -1,0 +1,35 @@
+# Ignore VCS and local tooling metadata
+.git
+.gitignore
+.env*
+
+# Node workspace artifacts
+node_modules
+**/node_modules
+dist
+.vite
+.next
+.turbo
+
+# Rust build outputs
+target
+**/target
+
+# Test/output artifacts
+coverage
+test-results
+playwright-report
+
+# Generated assets and caches
+*.tsbuildinfo
+*.log
+*.sqlite
+db
+tmp
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+
+# Generated native projects are not used by the web image
+apps/tauri/gen

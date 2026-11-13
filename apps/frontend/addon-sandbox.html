@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'sha256-s/UhdlprnzFxx+iXOtDj2n/Jk+MSRz1g/1lyBtFatVw=' 'wasm-unsafe-eval' blob:; style-src 'unsafe-inline' blob:; img-src data: blob:; font-src data: blob:; media-src data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+  </head>
+  <body>
+    <div id="addon-root"></div>
+    <script>
+      (function () {
+        var channel = "wealthfolio:addon-sandbox:v1";
+        var protocolVersion = 1;
+        var scriptUrl;
+        var stylesheetUrl;
+        var didAcceptRuntime = false;
+        var params = new URLSearchParams(window.name);
+        var addonId = params.get("addonId");
+        var nonce = params.get("nonce");
+
+        function post(type, payload) {
+          parent.postMessage(
+            Object.assign(
+              { channel: channel, addonId: addonId, nonce: nonce, type: type },
+              payload,
+            ),
+            "*",
+          );
+        }
+
+        function applyInitialTheme() {
+          var themeClass = params.get("themeClass") === "dark" ? "dark" : "light";
+          var fontClass = params.get("fontClass");
+          var backgroundColor = params.get("backgroundColor");
+          var foregroundColor = params.get("foregroundColor");
+          document.documentElement.classList.add(themeClass);
+          document.documentElement.style.colorScheme = params.get("colorScheme") || themeClass;
+          if (backgroundColor) {
+            document.documentElement.style.setProperty(
+              "--addon-initial-background",
+              backgroundColor,
+            );
+          }
+          if (foregroundColor) {
+            document.documentElement.style.setProperty(
+              "--addon-initial-foreground",
+              foregroundColor,
+            );
+          }
+          if (/^font-(mono|sans|serif)$/.test(fontClass)) {
+            document.body.classList.add(fontClass);
+          }
+        }
+
+        function fail(phase, error) {
+          var message = error && error.message ? error.message : String(error);
+          post("loadError", { error: message, phase: phase });
+        }
+
+        applyInitialTheme();
+        if (!addonId || !nonce) {
+          throw new Error("Invalid addon sandbox bootstrap parameters");
+        }
+
+        window.addEventListener("message", function (event) {
+          var message = event.data;
+          if (
+            event.source !== parent ||
+            !message ||
+            message.channel !== channel ||
+            message.addonId !== addonId ||
+            message.nonce !== nonce ||
+            message.type !== "loadRuntime"
+          ) {
+            return;
+          }
+
+          if (didAcceptRuntime) {
+            fail("validating runtime assets", new Error("Duplicate sandbox runtime payload"));
+            return;
+          }
+          didAcceptRuntime = true;
+
+          if (
+            message.protocolVersion !== protocolVersion ||
+            !(message.script instanceof Blob) ||
+            !(message.stylesheet instanceof Blob)
+          ) {
+            fail("validating runtime assets", new Error("Invalid sandbox runtime payload"));
+            return;
+          }
+
+          stylesheetUrl = URL.createObjectURL(message.stylesheet);
+          scriptUrl = URL.createObjectURL(message.script);
+          post("loadPhase", { phase: "loading runtime stylesheet" });
+
+          var stylesheet = document.createElement("link");
+          stylesheet.rel = "stylesheet";
+          stylesheet.href = stylesheetUrl;
+          stylesheet.onload = function () {
+            post("loadPhase", { phase: "importing sandbox runtime" });
+            import(scriptUrl).catch(function (error) {
+              fail("importing sandbox runtime", error);
+            });
+          };
+          stylesheet.onerror = function () {
+            fail(
+              "loading runtime stylesheet",
+              new Error("Sandbox runtime stylesheet failed to load"),
+            );
+          };
+          document.head.appendChild(stylesheet);
+        });
+
+        window.addEventListener("unload", function () {
+          if (scriptUrl) URL.revokeObjectURL(scriptUrl);
+          if (stylesheetUrl) URL.revokeObjectURL(stylesheetUrl);
+        });
+
+        post("bootstrapReady");
+      })();
+    </script>
+  </body>
+</html>

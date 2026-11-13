@@ -1,0 +1,22 @@
+---
+source: crates/ai/tests/tool_outputs_parity.rs
+assertion_line: 495
+expression: result
+---
+{
+  "ok": {
+    "assetQuery": "VT - Vanguard Total World Stock Index Fund ETF Shares (mic: ARCX, currency: USD, id: asset-vt-arcx)",
+    "assignments": [],
+    "resolvedAsset": {
+      "assetId": "asset-vt-arcx",
+      "currency": "USD",
+      "displayCode": "VT",
+      "exchangeMic": "ARCX",
+      "instrumentType": "EQUITY",
+      "label": "VT - Vanguard Total World Stock Index Fund ETF Shares",
+      "matchedBy": "label",
+      "name": "Vanguard Total World Stock Index Fund ETF Shares",
+      "symbol": "VT"
+    }
+  }
+}

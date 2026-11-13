@@ -1,0 +1,627 @@
+//! Event queue worker for processing domain events.
+//!
+//! Receives events from an mpsc channel, debounces them with a 500ms window,
+//! then processes the batch to trigger portfolio recalculation, asset enrichment,
+//! and broker sync.
+
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::{Arc, RwLock};
+use std::time::Duration;
+
+use tokio::sync::mpsc;
+use wealthfolio_connect::{
+    acquire_broker_sync_guard, ensure_valid_access_token, BrokerSyncServiceTrait,
+    TokenLifecycleConfig, TokenLifecycleState,
+};
+use wealthfolio_core::{
+    assets::AssetServiceTrait,
+    events::DomainEvent,
+    goals::GoalServiceTrait,
+    portfolio::valuation::CurrentAccountValuationService,
+    secrets::SecretStore,
+    utils::time_utils::{parse_user_timezone_or_default, user_today},
+};
+
+use super::planner::{
+    plan_asset_classification_change, plan_asset_enrichment, plan_broker_sync,
+    plan_categorization_job, plan_portfolio_job,
+};
+use crate::events::EventBus;
+
+/// Debounce window for collecting events before processing.
+const DEBOUNCE_DURATION: Duration = Duration::from_millis(1000);
+/// A batch is processed at most this long after its first event.
+const MAX_BATCH_WAIT: Duration = Duration::from_millis(5000);
+
+/// Dependencies needed by the queue worker for processing events.
+pub struct QueueWorkerDeps {
+    pub settings_service: Arc<dyn wealthfolio_core::settings::SettingsServiceTrait>,
+    pub asset_service: Arc<dyn AssetServiceTrait + Send + Sync>,
+    pub connect_sync_service: Arc<dyn BrokerSyncServiceTrait + Send + Sync>,
+    pub event_bus: EventBus,
+    pub broker_sync_running: Arc<AtomicBool>,
+    pub health_service: Arc<dyn wealthfolio_core::health::HealthServiceTrait + Send + Sync>,
+    // We need a way to enqueue portfolio jobs. Since AppState is not easily cloneable,
+    // we pass what we need for enqueue_portfolio_job (which spawns its own async task).
+    // The shared.rs enqueue_portfolio_job needs Arc<AppState>, so we'll need to pass
+    // a callback or restructure slightly. For now, we'll store what we need.
+    pub snapshot_service:
+        Arc<dyn wealthfolio_core::portfolio::snapshot::SnapshotServiceTrait + Send + Sync>,
+    pub quote_service: Arc<dyn wealthfolio_core::quotes::QuoteServiceTrait + Send + Sync>,
+    pub portfolio_coordinator: Arc<wealthfolio_core::portfolio::coordinator::PortfolioCoordinator>,
+    pub account_service: Arc<wealthfolio_core::accounts::AccountService>,
+    pub goal_service: Arc<dyn GoalServiceTrait + Send + Sync>,
+    pub fx_service: Arc<dyn wealthfolio_core::fx::FxServiceTrait + Send + Sync>,
+    pub base_currency: Arc<RwLock<String>>,
+    pub timezone: Arc<RwLock<String>>,
+    /// Secret store for accessing credentials (e.g., refresh tokens for broker sync)
+    pub secret_store: Arc<dyn SecretStore>,
+    /// Shared token lifecycle state; must be the same instance used by API handlers.
+    pub token_lifecycle: Arc<TokenLifecycleState>,
+    pub profile_binding:
+        Arc<std::sync::OnceLock<(Arc<wealthfolio_core::profiles::ProfileRegistry>, uuid::Uuid)>>,
+    /// Spending settings — used to filter ActivitiesChanged events to opted-in accounts.
+    pub spending_settings_service: Arc<wealthfolio_spending::settings::SpendingSettingsService>,
+    /// Categorization rules service — auto-runs rules against newly-changed activities.
+    pub categorization_rules_service:
+        Arc<wealthfolio_spending::categorization_rules::CategorizationRulesService>,
+}
+
+/// Runs the event queue worker.
+///
+/// Receives events from the channel, debounces with a 500ms window,
+/// and processes batches to trigger appropriate actions.
+///
+/// Uses an `is_processing` guard to prevent new batches from being processed
+/// while a previous batch (e.g., broker sync or portfolio recalc) is still running.
+pub async fn event_queue_worker(
+    mut rx: mpsc::UnboundedReceiver<DomainEvent>,
+    deps: Arc<QueueWorkerDeps>,
+) {
+    tracing::info!("Domain event queue worker started");
+
+    let mut pending_events: Vec<DomainEvent> = Vec::new();
+    let mut batch_started: Option<std::time::Instant> = None;
+    let is_processing = Arc::new(AtomicBool::new(false));
+
+    loop {
+        // Wait for the first event, then debounce; a sustained event stream
+        // never postpones the batch beyond MAX_BATCH_WAIT (architecture §3.3).
+        let maybe_event = if pending_events.is_empty() {
+            rx.recv().await
+        } else {
+            let wait = batch_started
+                .map(|started| MAX_BATCH_WAIT.saturating_sub(started.elapsed()))
+                .unwrap_or(DEBOUNCE_DURATION)
+                .min(DEBOUNCE_DURATION);
+            tokio::select! {
+                event = rx.recv() => event,
+                _ = tokio::time::sleep(wait) => None,
+            }
+        };
+
+        match maybe_event {
+            Some(event) => {
+                pending_events.push(event);
+                let started = *batch_started.get_or_insert_with(std::time::Instant::now);
+                if started.elapsed() < MAX_BATCH_WAIT {
+                    continue;
+                }
+            }
+            None if pending_events.is_empty() => {
+                while is_processing.load(Ordering::SeqCst) {
+                    tokio::time::sleep(Duration::from_millis(50)).await;
+                }
+                tracing::info!("Domain event queue worker shutting down");
+                return;
+            }
+            None => {}
+        }
+
+        if is_processing.load(Ordering::SeqCst) {
+            tracing::debug!("Debounce expired but previous batch still processing, continuing to collect events");
+            continue;
+        }
+        let batch = std::mem::take(&mut pending_events);
+        batch_started = None;
+        is_processing.store(true, Ordering::SeqCst);
+        process_event_batch(&batch, deps.clone()).await;
+        is_processing.store(false, Ordering::SeqCst);
+    }
+}
+
+fn read_setting(
+    deps: &QueueWorkerDeps,
+    lock: &RwLock<String>,
+    name: &'static str,
+) -> Option<String> {
+    match crate::main_lib::read_runtime_setting(lock, name) {
+        Ok(value) => Some(value),
+        Err(error) => {
+            tracing::error!("Background operation stopped: {error}");
+            deps.event_bus
+                .publish(crate::events::ServerEvent::with_payload(
+                    crate::events::PORTFOLIO_UPDATE_ERROR,
+                    serde_json::json!(error.to_string()),
+                ));
+            None
+        }
+    }
+}
+
+/// Processes a batch of domain events.
+async fn process_event_batch(events: &[DomainEvent], deps: Arc<QueueWorkerDeps>) {
+    tracing::info!("Processing batch of {} domain event(s)", events.len());
+
+    if let Some(plan) = plan_asset_classification_change(events) {
+        deps.event_bus
+            .publish(crate::events::ServerEvent::with_payload(
+                crate::events::ASSET_CLASSIFICATIONS_CHANGED,
+                serde_json::json!({
+                    "assetIds": plan.asset_ids,
+                    "taxonomyIds": plan.taxonomy_ids,
+                }),
+            ));
+    }
+
+    // 1. Plan and run asset enrichment FIRST so that bond metadata (coupon rate,
+    //    maturity date, etc.) is available before the portfolio job tries to
+    //    sync quotes and calculate snapshots.
+    let enrichment_assets = plan_asset_enrichment(events);
+    if !enrichment_assets.is_empty() {
+        tracing::info!(
+            "Triggering asset enrichment for {} asset(s)",
+            enrichment_assets.len()
+        );
+
+        let total = enrichment_assets.len();
+        deps.event_bus
+            .publish(crate::events::ServerEvent::with_payload(
+                crate::events::ASSET_ENRICHMENT_START,
+                serde_json::json!({ "total": total }),
+            ));
+
+        let mut total_enriched: usize = 0;
+        let mut total_skipped: usize = 0;
+        let mut total_failed: usize = 0;
+
+        let chunk_size = 5;
+
+        for chunk in enrichment_assets.chunks(chunk_size) {
+            match tokio::time::timeout(
+                Duration::from_secs(30),
+                deps.asset_service.enrich_assets(chunk.to_vec()),
+            )
+            .await
+            {
+                Ok(Ok((enriched, skipped, failed))) => {
+                    total_enriched += enriched;
+                    total_skipped += skipped;
+                    total_failed += failed;
+                }
+                Ok(Err(e)) => {
+                    tracing::warn!("Asset enrichment chunk failed: {}", e);
+                    total_failed += chunk.len();
+                }
+                Err(_) => {
+                    tracing::warn!(
+                        "Asset enrichment chunk timed out ({} asset(s))",
+                        chunk.len()
+                    );
+                    total_failed += chunk.len();
+                }
+            }
+
+            let completed = total_enriched + total_skipped + total_failed;
+            deps.event_bus
+                .publish(crate::events::ServerEvent::with_payload(
+                    crate::events::ASSET_ENRICHMENT_PROGRESS,
+                    serde_json::json!({
+                        "completed": completed,
+                        "total": total,
+                    }),
+                ));
+        }
+
+        deps.event_bus
+            .publish(crate::events::ServerEvent::with_payload(
+                crate::events::ASSET_ENRICHMENT_COMPLETE,
+                serde_json::json!({
+                    "enriched": total_enriched,
+                    "skipped": total_skipped,
+                    "failed": total_failed,
+                }),
+            ));
+    }
+
+    // 2. Plan and trigger portfolio job
+    if let Some(config) = plan_portfolio_job(events) {
+        let prices_changed = events
+            .iter()
+            .any(|event| matches!(event, DomainEvent::PriceHistoryChanged));
+        if prices_changed {
+            deps.health_service.clear_cache().await;
+            // Saved prices changed: reload the in-memory FX converter so every
+            // later read sees the new rates, as the job's facts will.
+            if let Err(error) = deps.fx_service.initialize() {
+                deps.event_bus
+                    .publish(crate::events::ServerEvent::with_payload(
+                        crate::events::PORTFOLIO_UPDATE_ERROR,
+                        serde_json::json!(error.to_string()),
+                    ));
+                return;
+            }
+        }
+        tracing::info!(
+            "Triggering portfolio job for accounts: {:?}, market_sync: {:?}",
+            config.account_ids,
+            config.market_sync_mode
+        );
+
+        // Run the portfolio job directly (not spawned) so that is_processing
+        // guard properly tracks completion and prevents concurrent jobs
+        run_portfolio_job(deps.clone(), config).await;
+
+        // Keep goal cards current after valuation changes, matching the Tauri worker.
+        refresh_all_goal_summaries(deps.clone()).await;
+    }
+
+    // 2b. Auto-categorize newly-changed activities on opted-in spending accounts.
+    spawn_auto_categorize_for_batch(events, deps.clone()).await;
+
+    // 3. Plan and trigger broker sync
+    let sync_accounts = plan_broker_sync(events);
+    if !sync_accounts.is_empty() {
+        tracing::info!(
+            "Broker sync needed for {} account(s): {:?}",
+            sync_accounts.len(),
+            sync_accounts
+        );
+
+        // Spawn broker sync as a background task
+        let connect_sync_service = deps.connect_sync_service.clone();
+        let event_bus = deps.event_bus.clone();
+        let secret_store = deps.secret_store.clone();
+        let token_lifecycle = deps.token_lifecycle.clone();
+        let profile_binding = deps.profile_binding.get().cloned();
+        let settings_service = deps.settings_service.clone();
+        let broker_sync_running = deps.broker_sync_running.clone();
+
+        tokio::spawn(async move {
+            let Some(_guard) = acquire_broker_sync_guard(&broker_sync_running) else {
+                tracing::info!(
+                    "Broker sync skipped after tracking mode change: sync already running"
+                );
+                return;
+            };
+
+            match perform_broker_sync(
+                settings_service,
+                connect_sync_service,
+                event_bus,
+                secret_store,
+                token_lifecycle,
+                profile_binding,
+            )
+            .await
+            {
+                Ok(result) => {
+                    tracing::info!(
+                        "Broker sync completed after tracking mode change: success={}, message={}",
+                        result.success,
+                        result.message
+                    );
+                }
+                Err(e) => {
+                    tracing::warn!("Broker sync failed after tracking mode change: {}", e);
+                }
+            }
+        });
+    }
+}
+
+/// Runs a portfolio job through the coordinator (not spawned, so the
+/// `is_processing` guard tracks completion).
+async fn run_portfolio_job(
+    deps: Arc<QueueWorkerDeps>,
+    config: crate::api::shared::PortfolioJobConfig,
+) {
+    let observer = crate::api::shared::ServerJobObserver::with_parts(
+        deps.event_bus.clone(),
+        deps.health_service.clone(),
+    );
+    if let Err(err) = deps
+        .portfolio_coordinator
+        .run_job_with_retry(
+            config.into_request(),
+            &observer,
+            wealthfolio_core::portfolio::coordinator::RetryPolicy::default(),
+        )
+        .await
+    {
+        tracing::error!("Portfolio job failed: {}", err);
+    }
+}
+
+/// Plans and spawns auto-categorization for this batch's spending-account
+/// activity changes. Loads `SpendingSettings` once per batch; no-op when
+/// spending tracking is disabled or no opted-in account was touched.
+///
+/// Fire-and-forget by design — categorization writes are idempotent and
+/// the originating mutation has already returned to the API caller.
+async fn spawn_auto_categorize_for_batch(events: &[DomainEvent], deps: Arc<QueueWorkerDeps>) {
+    let settings = match deps.spending_settings_service.get().await {
+        Ok(s) => s,
+        Err(e) => {
+            tracing::warn!(
+                "Skipping auto-categorization: failed to load spending settings: {}",
+                e
+            );
+            return;
+        }
+    };
+    if !settings.enabled || settings.account_ids.is_empty() {
+        return;
+    }
+    let opted_in: std::collections::HashSet<String> =
+        settings.account_ids.iter().cloned().collect();
+    let account_ids = plan_categorization_job(events, &opted_in);
+    if account_ids.is_empty() {
+        return;
+    }
+    tracing::info!(
+        "Triggering auto-categorization for {} account(s)",
+        account_ids.len()
+    );
+    let rules_service = deps.categorization_rules_service.clone();
+    tokio::spawn(async move {
+        match rules_service
+            .rerun_all(&account_ids, /* only_uncategorized */ true)
+            .await
+        {
+            Ok(count) if count > 0 => {
+                tracing::info!("Auto-categorization wrote {} assignment(s)", count);
+            }
+            Ok(_) => {}
+            Err(e) => tracing::warn!("Auto-categorization failed: {}", e),
+        }
+    });
+}
+
+/// Refreshes cached summary fields for all active goals after valuation changes.
+async fn refresh_all_goal_summaries(deps: Arc<QueueWorkerDeps>) {
+    use rust_decimal::prelude::ToPrimitive;
+    use wealthfolio_core::accounts::AccountServiceTrait;
+
+    let goals = match deps.goal_service.get_goals() {
+        Ok(goals) => goals,
+        Err(err) => {
+            tracing::warn!("Failed to load goals for summary refresh: {}", err);
+            return;
+        }
+    };
+
+    let active_goals: Vec<_> = goals
+        .iter()
+        .filter(|goal| goal.status_lifecycle == "active")
+        .collect();
+
+    if active_goals.is_empty() {
+        return;
+    }
+
+    let accounts = match deps.account_service.get_active_non_archived_accounts() {
+        Ok(accounts) => accounts,
+        Err(err) => {
+            tracing::warn!("Failed to load accounts for goal summary refresh: {}", err);
+            return;
+        }
+    };
+    let account_ids: Vec<String> = accounts.into_iter().map(|account| account.id).collect();
+    let Some(base_currency) = read_setting(&deps, &deps.base_currency, "Base currency") else {
+        return;
+    };
+    let Some(timezone) = read_setting(&deps, &deps.timezone, "Timezone") else {
+        return;
+    };
+    let latest_snapshot_cutoff = user_today(parse_user_timezone_or_default(&timezone));
+    let service = CurrentAccountValuationService::new(
+        deps.account_service.as_ref(),
+        deps.snapshot_service.as_ref(),
+        deps.asset_service.as_ref(),
+        deps.quote_service.as_ref(),
+        deps.fx_service.as_ref(),
+    );
+    let response = match service
+        .get_current_valuation_for_scope(
+            "all",
+            &account_ids,
+            &base_currency,
+            latest_snapshot_cutoff,
+            true,
+        )
+        .await
+    {
+        Ok(response) => response,
+        Err(err) => {
+            tracing::warn!(
+                "Failed to load current valuations for goal summary refresh: {}",
+                err
+            );
+            return;
+        }
+    };
+
+    let mut valuation_map = std::collections::HashMap::new();
+    for valuation in &response.accounts {
+        let Some(value_in_base) = valuation.total_value_base.to_f64() else {
+            tracing::warn!(
+                "Skipping goal summary refresh: invalid base valuation total for account {}",
+                valuation.account_id
+            );
+            return;
+        };
+        valuation_map.insert(valuation.account_id.clone(), value_in_base);
+    }
+
+    for goal in active_goals {
+        if let Err(err) = deps
+            .goal_service
+            .refresh_goal_summary(&goal.id, &valuation_map)
+            .await
+        {
+            tracing::debug!("Failed to refresh summary for goal {}: {}", goal.id, err);
+        }
+    }
+
+    tracing::debug!(
+        "Refreshed summaries for {} active goal(s)",
+        goals
+            .iter()
+            .filter(|goal| goal.status_lifecycle == "active")
+            .count()
+    );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Broker Sync
+// ─────────────────────────────────────────────────────────────────────────────
+
+fn cloud_api_base_url() -> String {
+    crate::features::cloud_api_base_url().unwrap_or_default()
+}
+
+fn connect_auth_url() -> Option<String> {
+    std::env::var("CONNECT_AUTH_URL")
+        .ok()
+        .map(|v| v.trim().trim_end_matches('/').to_string())
+        .filter(|v| !v.is_empty())
+        .or_else(|| option_env!("CONNECT_AUTH_URL").map(|v| v.trim_end_matches('/').to_string()))
+}
+
+fn connect_auth_api_key() -> Option<String> {
+    std::env::var("CONNECT_AUTH_PUBLISHABLE_KEY")
+        .ok()
+        .or_else(|| option_env!("CONNECT_AUTH_PUBLISHABLE_KEY").map(String::from))
+}
+
+fn token_lifecycle_config() -> Option<TokenLifecycleConfig> {
+    let auth_url = connect_auth_url()?;
+    let api_key = connect_auth_api_key()?;
+    Some(TokenLifecycleConfig::new(auth_url, api_key))
+}
+
+/// Progress reporter that publishes events to the EventBus for SSE delivery.
+struct EventBusProgressReporter {
+    event_bus: EventBus,
+}
+
+impl EventBusProgressReporter {
+    fn new(event_bus: EventBus) -> Self {
+        Self { event_bus }
+    }
+}
+
+impl wealthfolio_connect::SyncProgressReporter for EventBusProgressReporter {
+    fn report_progress(&self, payload: wealthfolio_connect::SyncProgressPayload) {
+        use crate::events::ServerEvent;
+        self.event_bus.publish(ServerEvent::with_payload(
+            "sync-progress",
+            serde_json::to_value(&payload).unwrap_or_default(),
+        ));
+    }
+
+    fn report_sync_start(&self) {
+        use crate::events::{ServerEvent, BROKER_SYNC_START};
+        self.event_bus.publish(ServerEvent::new(BROKER_SYNC_START));
+    }
+
+    fn report_sync_complete(&self, result: &wealthfolio_connect::SyncResult) {
+        use crate::events::{ServerEvent, BROKER_SYNC_COMPLETE, BROKER_SYNC_ERROR};
+        if result.success {
+            self.event_bus.publish(ServerEvent::with_payload(
+                BROKER_SYNC_COMPLETE,
+                serde_json::to_value(result).unwrap_or_default(),
+            ));
+        } else {
+            self.event_bus.publish(ServerEvent::with_payload(
+                BROKER_SYNC_ERROR,
+                serde_json::json!({ "error": result.message }),
+            ));
+        }
+    }
+}
+
+/// Mint a fresh access token using the stored refresh token.
+async fn mint_access_token(
+    settings: &dyn wealthfolio_core::settings::SettingsServiceTrait,
+    secret_store: &Arc<dyn SecretStore>,
+    token_lifecycle: &TokenLifecycleState,
+    profile_binding: Option<&(Arc<wealthfolio_core::profiles::ProfileRegistry>, uuid::Uuid)>,
+) -> Result<String, String> {
+    if settings
+        .requires_cloud_reconnect()
+        .map_err(|e| e.to_string())?
+    {
+        return Err("Reconnect Wealthfolio Connect after restoring this backup.".into());
+    }
+    let config = token_lifecycle_config().ok_or("Connect auth unavailable")?;
+    let (registry, id) = profile_binding.ok_or("Profile binding unavailable")?;
+    let token = ensure_valid_access_token(secret_store.as_ref(), token_lifecycle, Some(&config))
+        .await
+        .map_err(|e| e.to_string())?;
+    wealthfolio_connect::token_lifecycle::admit_profile_binding(
+        &token,
+        &config,
+        &cloud_api_base_url(),
+        registry.as_ref(),
+        *id,
+    )
+    .await?;
+    Ok(token)
+}
+
+/// Core broker sync logic - syncs connections, accounts, and activities from cloud to local DB.
+/// Uses the centralized SyncOrchestrator for full pagination support.
+/// Asset enrichment is handled automatically via domain events (AssetsCreated).
+async fn perform_broker_sync(
+    settings: Arc<dyn wealthfolio_core::settings::SettingsServiceTrait>,
+    connect_sync_service: Arc<dyn BrokerSyncServiceTrait + Send + Sync>,
+    event_bus: EventBus,
+    secret_store: Arc<dyn SecretStore>,
+    token_lifecycle: Arc<TokenLifecycleState>,
+    profile_binding: Option<(Arc<wealthfolio_core::profiles::ProfileRegistry>, uuid::Uuid)>,
+) -> Result<wealthfolio_connect::SyncResult, String> {
+    use wealthfolio_connect::{ConnectApiClient, SyncConfig, SyncOrchestrator};
+
+    if !crate::features::connect_sync_enabled() {
+        return Err("Connect sync feature is disabled in this build.".to_string());
+    }
+
+    // Create API client with fresh access token
+    let token = mint_access_token(
+        settings.as_ref(),
+        &secret_store,
+        token_lifecycle.as_ref(),
+        profile_binding.as_ref(),
+    )
+    .await?;
+    let client = ConnectApiClient::new(&cloud_api_base_url(), &token).map_err(|e| e.to_string())?;
+
+    // Check plan entitlement before syncing
+    if !client.has_broker_sync().await.map_err(|e| e.to_string())? {
+        return Err("Plan does not include broker sync".to_string());
+    }
+
+    // Create progress reporter and orchestrator
+    let reporter = Arc::new(EventBusProgressReporter::new(event_bus));
+    let orchestrator = SyncOrchestrator::new(
+        connect_sync_service.clone(),
+        reporter,
+        SyncConfig::default(),
+    );
+
+    // Run the sync via the centralized orchestrator
+    // Note: Asset enrichment is handled automatically via domain events (AssetsCreated)
+    orchestrator.sync_all(&client).await
+}

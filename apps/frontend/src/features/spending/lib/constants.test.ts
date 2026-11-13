@@ -1,0 +1,228 @@
+import { createInstance } from "i18next";
+
+import enActivity from "@/i18n/locales/en/activity.json";
+import enSpending from "@/i18n/locales/en/spending.json";
+import frActivity from "@/i18n/locales/fr/activity.json";
+import frSpending from "@/i18n/locales/fr/spending.json";
+import { AccountType } from "@/lib/constants";
+
+import {
+  getActivitySpendingAmount,
+  getCashActivityLabel,
+  getActivityTypesForAccount,
+  getEffectiveCashActivityType,
+  getVisibleSpendingAmount,
+  isCashActivityIncome,
+} from "./constants";
+
+describe("spending constants", () => {
+  describe("getEffectiveCashActivityType", () => {
+    it("prefers activity type overrides", () => {
+      expect(
+        getEffectiveCashActivityType({
+          activityType: "WITHDRAWAL",
+          activityTypeOverride: "TRANSFER_OUT",
+        }),
+      ).toBe("TRANSFER_OUT");
+    });
+  });
+
+  describe("getActivityTypesForAccount", () => {
+    it("uses card-specific activity options for credit cards", () => {
+      expect(getActivityTypesForAccount(AccountType.CREDIT_CARD)).toEqual([
+        "WITHDRAWAL",
+        "FEE",
+        "INTEREST",
+        "TRANSFER_IN",
+        "TRANSFER_OUT",
+        "CREDIT",
+      ]);
+    });
+
+    it("offers cash credits on cash accounts for reimbursements", () => {
+      expect(getActivityTypesForAccount(AccountType.CASH)).toContain("CREDIT");
+    });
+
+    it("offers tax for cash accounts", () => {
+      expect(getActivityTypesForAccount(AccountType.CASH)).toContain("TAX");
+    });
+  });
+
+  describe("getActivitySpendingAmount", () => {
+    it("counts credit-card charges and fees as spending", () => {
+      expect(
+        getActivitySpendingAmount(
+          { activityType: "WITHDRAWAL", amount: "100" },
+          AccountType.CREDIT_CARD,
+        ),
+      ).toBe(100);
+      expect(
+        getActivitySpendingAmount({ activityType: "FEE", amount: "25" }, AccountType.CREDIT_CARD),
+      ).toBe(25);
+      expect(
+        getActivitySpendingAmount(
+          { activityType: "INTEREST", amount: "12" },
+          AccountType.CREDIT_CARD,
+        ),
+      ).toBe(12);
+    });
+
+    it("treats credit-card payments as non-spending and credits as refunds", () => {
+      expect(
+        getActivitySpendingAmount(
+          { activityType: "TRANSFER_IN", amount: "100" },
+          AccountType.CREDIT_CARD,
+        ),
+      ).toBe(0);
+      expect(
+        getActivitySpendingAmount(
+          { activityType: "CREDIT", amount: "30" },
+          AccountType.CREDIT_CARD,
+        ),
+      ).toBe(-30);
+    });
+
+    it("only treats cash credits as spending refunds when subtype says so", () => {
+      expect(
+        getActivitySpendingAmount({ activityType: "CREDIT", amount: "40" }, AccountType.CASH),
+      ).toBe(0);
+      expect(
+        getActivitySpendingAmount(
+          { activityType: "CREDIT", subtype: "REFUND", amount: "40" },
+          AccountType.CASH,
+        ),
+      ).toBe(-40);
+      expect(
+        getActivitySpendingAmount(
+          { activityType: "CREDIT", subtype: "REIMBURSEMENT", amount: "40" },
+          AccountType.CASH,
+        ),
+      ).toBe(-40);
+      expect(
+        getActivitySpendingAmount(
+          { activityType: "CREDIT", subtype: "BONUS", amount: "40" },
+          AccountType.CASH,
+        ),
+      ).toBe(0);
+    });
+
+    it("counts cash tax as spending", () => {
+      expect(
+        getActivitySpendingAmount({ activityType: "TAX", amount: "58.22" }, AccountType.CASH),
+      ).toBe(58.22);
+    });
+
+    it("ignores linked cash transfers", () => {
+      expect(
+        getActivitySpendingAmount(
+          { activityType: "TRANSFER_OUT", amount: "100", sourceGroupId: "transfer-1" },
+          AccountType.CASH,
+        ),
+      ).toBe(0);
+    });
+
+    it("uses activity type overrides for transfer spending treatment", () => {
+      expect(
+        getActivitySpendingAmount(
+          {
+            activityType: "WITHDRAWAL",
+            activityTypeOverride: "TRANSFER_OUT",
+            amount: "100",
+            sourceGroupId: "transfer-1",
+          },
+          AccountType.CASH,
+        ),
+      ).toBe(0);
+      expect(
+        getActivitySpendingAmount(
+          {
+            activityType: "WITHDRAWAL",
+            activityTypeOverride: "TRANSFER_IN",
+            amount: "100",
+          },
+          AccountType.CREDIT_CARD,
+        ),
+      ).toBe(0);
+    });
+
+    it("ignores non-spending accounts", () => {
+      expect(
+        getActivitySpendingAmount(
+          { activityType: "WITHDRAWAL", amount: "100" },
+          AccountType.SECURITIES,
+        ),
+      ).toBe(0);
+    });
+  });
+
+  describe("isCashActivityIncome", () => {
+    it("uses cash credit subtypes to distinguish income from refunds", () => {
+      expect(isCashActivityIncome("CREDIT", AccountType.CASH, "BONUS")).toBe(true);
+      expect(isCashActivityIncome("CREDIT", AccountType.CASH, "REFUND")).toBe(false);
+      expect(isCashActivityIncome("CREDIT", AccountType.CASH, "REIMBURSEMENT")).toBe(false);
+      expect(isCashActivityIncome("CREDIT", AccountType.CREDIT_CARD, "BONUS")).toBe(false);
+    });
+  });
+
+  describe("getVisibleSpendingAmount", () => {
+    const withdrawal = { activityType: "WITHDRAWAL", amount: 100 };
+
+    it("uses the server-computed visible amount when the row carries one", () => {
+      expect(
+        getVisibleSpendingAmount({ ...withdrawal, visibleSpendingAmount: 0 }, AccountType.CASH),
+      ).toBe(0);
+      expect(
+        getVisibleSpendingAmount({ ...withdrawal, visibleSpendingAmount: 80 }, AccountType.CASH),
+      ).toBe(80);
+    });
+
+    it("falls back to the unfiltered spending amount for rows without it", () => {
+      expect(getVisibleSpendingAmount(withdrawal, AccountType.CASH)).toBe(100);
+    });
+  });
+});
+
+describe("getCashActivityLabel", () => {
+  const i18n = createInstance();
+  beforeAll(async () => {
+    await i18n.init({
+      lng: "en",
+      fallbackLng: "en",
+      resources: {
+        en: { activity: enActivity, spending: enSpending },
+        fr: { activity: frActivity, spending: frSpending },
+      },
+    });
+  });
+
+  it("keeps the English labels the table, filter and form showed before", () => {
+    const t = i18n.getFixedT("en");
+
+    expect(getCashActivityLabel(t, "WITHDRAWAL", AccountType.CASH)).toBe("Withdrawal");
+    expect(getCashActivityLabel(t, "TRANSFER_IN", AccountType.CASH)).toBe("Transfer In");
+    expect(getCashActivityLabel(t, "CREDIT", AccountType.CASH, "REIMBURSEMENT")).toBe(
+      "Reimbursement / refund",
+    );
+    expect(getCashActivityLabel(t, "WITHDRAWAL", AccountType.CREDIT_CARD)).toBe("Charge");
+    expect(getCashActivityLabel(t, "FEE", AccountType.CREDIT_CARD)).toBe("Fee");
+    expect(getCashActivityLabel(t, "INTEREST", AccountType.CREDIT_CARD)).toBe("Interest Charge");
+    expect(getCashActivityLabel(t, "TRANSFER_IN", AccountType.CREDIT_CARD)).toBe("Payment");
+    expect(getCashActivityLabel(t, "TRANSFER_OUT", AccountType.CREDIT_CARD)).toBe(
+      "Balance Transfer / Cash Advance",
+    );
+    expect(getCashActivityLabel(t, "CREDIT", AccountType.CREDIT_CARD, "REIMBURSEMENT")).toBe(
+      "Refund / Credit",
+    );
+  });
+
+  it("translates both the base and the card wording", () => {
+    const t = i18n.getFixedT("fr");
+
+    expect(getCashActivityLabel(t, "WITHDRAWAL", AccountType.CASH)).toBe("Retrait");
+    expect(getCashActivityLabel(t, "WITHDRAWAL", AccountType.CREDIT_CARD)).toBe("Dépense");
+    expect(getCashActivityLabel(t, "TRANSFER_IN", AccountType.CREDIT_CARD)).toBe("Paiement");
+    expect(getCashActivityLabel(t, "TRANSFER_OUT", AccountType.CREDIT_CARD)).toBe(
+      "Transfert de solde / Avance de fonds",
+    );
+  });
+});

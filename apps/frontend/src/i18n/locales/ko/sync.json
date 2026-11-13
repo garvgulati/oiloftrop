@@ -1,0 +1,285 @@
+{
+  "section": {
+    "deviceSync": "기기 동기화",
+    "connectedDevices": "연결된 기기",
+    "otherConnectedDevices": "다른 연결된 기기",
+    "manageDevices": "기기 관리",
+    "options": "옵션",
+    "deviceActions": "기기 작업"
+  },
+  "setup": {
+    "cardDescription": "모든 기기에서 안전하게 데이터를 동기화하세요.",
+    "connectToSync": "이 기기를 연결하여 동기화",
+    "keepInSync": "기기 간 동기화 유지",
+    "foundOtherDevices": "계정에서 연결된 다른 기기를 찾았습니다. 계속 진행하여 이 기기를 연결하세요.",
+    "encryptedInfo": "데이터는 종단간 암호화됩니다. 사용자의 기기만 데이터를 읽을 수 있습니다.",
+    "morePreview": "+{{count}}개 더",
+    "settingUp": "설정 중...",
+    "connectThisDevice": "이 기기 연결",
+    "enableDeviceSync": "기기 동기화 사용",
+    "morePreview_other": "+{{count}}개 더"
+  },
+  "status": {
+    "syncError": "동기화 오류",
+    "syncPaused": "동기화 일시 중지됨",
+    "synced": "동기화됨",
+    "syncing": "동기화 중",
+    "connected": "연결됨",
+    "needsSetup": "설정 필요",
+    "revoked": "취소됨",
+    "notConnected": "연결 안 됨",
+    "online": "온라인",
+    "never": "없음",
+    "minutesAgo": "{{count}}분 전",
+    "hoursAgo": "{{count}}시간 전",
+    "daysAgo": "{{count}}일 전",
+    "thisDevice": "이 기기",
+    "thisDeviceSuffix": "· 이 기기",
+    "minutesAgo_other": "{{count}}분 전",
+    "hoursAgo_other": "{{count}}시간 전",
+    "daysAgo_other": "{{count}}일 전"
+  },
+  "engine": {
+    "pauseSync": "동기화 일시 중지",
+    "resumeSync": "동기화 재개",
+    "updating": "업데이트 중...",
+    "backgroundPaused": "백그라운드 동기화가 일시 중지되었습니다",
+    "backgroundResumed": "백그라운드 동기화가 재개되었습니다",
+    "updateFailed": "백그라운드 동기화 업데이트에 실패했습니다"
+  },
+  "errorState": {
+    "failedToInitialize": "기기 동기화를 초기화하지 못했습니다.",
+    "initializationFailed": "초기화 실패",
+    "failedToLoadDevices": "기기를 불러오지 못했습니다",
+    "tryRefreshing": "새로고침해 보세요."
+  },
+  "stale": {
+    "keysNeedUpdating": "키 업데이트 필요",
+    "keysNeedUpdatingDescription": "다른 기기에서 보안 설정이 변경되었습니다. 동기화를 계속하려면 이 기기를 다시 연결하세요.",
+    "updateThisDevice": "이 기기 업데이트"
+  },
+  "orphaned": {
+    "restoreTitle": "이 기기로 동기화 복원",
+    "restoreDescription": "연결된 다른 기기가 없습니다. 이 기기에 있는 데이터로 동기화를 다시 시작합니다.",
+    "confirmDescription": "이 기기에 있는 데이터로 동기화를 다시 시작합니다.",
+    "restarting": "다시 시작하는 중..."
+  },
+  "untrusted": {
+    "notConnectedYet": "이 기기는 아직 연결되지 않았습니다",
+    "enterCodeFromDevices_one": "연결된 다른 기기 {{count}}대 중 하나에서 코드를 입력하세요.",
+    "enterCodeFromDevices_other": "연결된 다른 기기 {{count}}대 중 하나에서 코드를 입력하세요.",
+    "enterCodeGeneric": "데이터를 동기화하려면 다른 연결된 기기에서 코드를 입력하세요.",
+    "connectThisDevice": "이 기기 연결",
+    "connectToStartSyncing": "이 기기를 연결하여 동기화를 시작하세요."
+  },
+  "connect": {
+    "connectAnotherDevice": "다른 기기 연결",
+    "connectThisDevice": "이 기기 연결",
+    "pair": "페어링",
+    "unpair": "페어링 해제",
+    "revoke": "취소",
+    "rename": "이름 변경",
+    "disconnect": "연결 해제"
+  },
+  "waitingSnapshot": {
+    "otherDeviceFinishing": "다른 기기에서 설정을 마무리하는 중입니다.",
+    "setupAlmostDone": "설정이 거의 완료되었습니다.",
+    "trustedHint": "지금 바로 진행 속도를 높이거나, 기다리면 백그라운드에서 자동으로 계속 진행됩니다.",
+    "untrustedHint": "먼저 연결된 다른 기기에서 설정을 완료해 주세요. 이 페이지는 자동으로 업데이트됩니다.",
+    "checking": "확인 중...",
+    "checkAgain": "다시 확인",
+    "preparing": "준비 중...",
+    "speedUpSetup": "설정 속도 높이기"
+  },
+  "bootstrap": {
+    "couldNotRetryTitle": "동기화를 재시도할 수 없습니다"
+  },
+  "snapshot": {
+    "uploadedTitle": "스냅샷 업로드됨",
+    "uploadedDescription": "새로 연결된 기기는 이제 이 스냅샷으로 동기화를 완료할 수 있습니다.",
+    "skippedTitle": "스냅샷 업로드 건너뜀",
+    "cancelledTitle": "스냅샷 업로드 취소됨",
+    "resultTitle": "스냅샷 업로드 결과",
+    "failedTitle": "스냅샷 업로드 실패"
+  },
+  "reinit": {
+    "title": "이 기기에서 동기화를 다시 설정하시겠습니까?",
+    "description": "이 기기의 데이터는 유지되며 동기화를 다시 시작하는 데 사용됩니다. 다른 연결된 기기는 다시 연결해야 할 수 있습니다.",
+    "notNow": "나중에",
+    "continue": "계속"
+  },
+  "recovery": {
+    "title": "이 기기 다시 설정하기",
+    "description": "이 기기의 동기화가 꺼졌습니다. 모든 기기에서 데이터를 최신 상태로 유지하려면 다시 설정하세요.",
+    "notNow": "나중에",
+    "settingUp": "설정 중...",
+    "setUpAgain": "이 기기 다시 설정하기"
+  },
+  "disconnectDialog": {
+    "title": "이 기기를 연결 해제하시겠습니까?",
+    "description": "이 기기에서 동기화가 제거됩니다. 나중에 다시 설정할 수 있습니다.",
+    "disconnecting": "연결 해제 중...",
+    "disconnect": "연결 해제"
+  },
+  "unpairDialog": {
+    "titleLast": "마지막 기기를 페어링 해제하시겠습니까?",
+    "title": "기기를 페어링 해제하시겠습니까?",
+    "descriptionLast": "이 기기는 유일하게 연결된 기기입니다. 데이터 동기화를 계속하려면 기기를 다시 연결해야 합니다.",
+    "description": "\"{{name}}\"이(가) 계정에서 제거됩니다. 데이터를 동기화하려면 이 기기를 다시 연결해야 합니다.",
+    "unpairing": "페어링 해제 중...",
+    "unpair": "페어링 해제"
+  },
+  "toasts": {
+    "reinitFailed": "동기화를 다시 초기화하지 못했습니다",
+    "disconnectFailed": "연결 해제에 실패했습니다",
+    "unpairFailed": "기기 페어링 해제에 실패했습니다"
+  },
+  "pairing": {
+    "connectThisDeviceTitle": "이 기기 연결",
+    "enterCodeDescription": "연결된 다른 기기에서 코드를 입력하세요",
+    "connectAnotherTitle": "다른 기기 연결",
+    "scanOrEnterDescription": "다른 기기에서 이 코드를 스캔하거나 입력하세요",
+    "gettingReadyTitle": "이 기기를 준비하는 중...",
+    "gettingReadyDescription": "잠시만 기다려 주세요.",
+    "prepareFailed": "이 기기를 준비하지 못했습니다.",
+    "verifySecurityCode": "보안 코드 확인",
+    "transferringData": "데이터를 전송하는 중",
+    "transferringDataDescription": "새 기기를 위해 데이터 사본을 암호화하고 있습니다. 1분 정도 걸릴 수 있습니다.",
+    "preparingData": "데이터 준비 중",
+    "preparingDataDescription": "연결이 확인되었습니다. 데이터가 준비되는 동안 두 기기 모두에서 Wealthfolio를 열어 두세요.",
+    "securingConnection": "연결을 보호하는 중",
+    "securingConnectionDescription": "다른 기기와 암호화 키를 교환하고 있습니다."
+  },
+  "displayCode": {
+    "generating": "코드 생성 중",
+    "copyCode": "코드 복사",
+    "copied": "복사됨",
+    "expiresIn": "{{time}} 후 만료",
+    "expiredTitle": "이 코드가 만료되었습니다",
+    "expiredDescription": "안전한 연결을 위해 코드는 몇 분 동안만 유효합니다. 계속하려면 새 코드를 받으세요.",
+    "newCode": "새 코드 받기"
+  },
+  "enterCode": {
+    "openingCamera": "카메라 여는 중...",
+    "scanQrCode": "QR 코드 스캔",
+    "or": "또는",
+    "paste": "붙여넣기",
+    "connecting": "연결하는 중...",
+    "connect": "연결",
+    "scanInstructions": "QR 코드를 프레임 안에 맞춰 주세요.",
+    "cameraOpenError": "카메라를 열 수 없습니다. 다시 시도해 주세요.",
+    "cameraCloseError": "카메라를 닫을 수 없습니다. 다시 시도해 주세요.",
+    "cameraUnavailable": "사용 가능한 카메라가 없습니다. 실제 기기로 스캔하거나 아래에 페어링 코드를 입력해 주세요.",
+    "scanHint": "다른 기기에 표시된 코드에 카메라를 맞추세요.",
+    "codeLabel": "연결 코드"
+  },
+  "sas": {
+    "description": "다른 기기에 같은 코드가 표시되는지 확인하세요. 다른 사람이 연결하는 것을 막아 줍니다.",
+    "codesMatch": "코드가 일치합니다",
+    "codesDontMatch": "일치하지 않습니다",
+    "waitingDescription": "다른 기기에 이 코드가 표시되는지 확인한 후 그 기기에서 확인하세요.",
+    "mismatchTitle": "연결이 중단되었습니다",
+    "mismatchDescription": "코드가 일치하지 않아 아무것도 공유되지 않았습니다. 새 코드로 다시 시도하세요."
+  },
+  "waiting": {
+    "waitingForConfirmation": "확인 대기 중..."
+  },
+  "result": {
+    "allSet": "모든 준비가 끝났습니다!",
+    "connectedSuccessfully": "기기가 성공적으로 연결되었습니다",
+    "done": "완료",
+    "connectionFailed": "연결 실패",
+    "tryAgain": "다시 시도",
+    "devicesConnected": "기기가 연결되었습니다",
+    "finishOnOtherDevice": "다른 기기에서 설정을 완료하세요. 데이터가 준비되면 '준비 완료'가 표시됩니다."
+  },
+  "restore": {
+    "dialogTitle": "이 기기 설정 완료",
+    "transferring": {
+      "title": "데이터를 전송하는 중",
+      "description": "다른 기기의 암호화된 사본을 다운로드하고 확인하는 중입니다."
+    },
+    "waiting": {
+      "title": "최신 사본을 기다리는 중",
+      "description": "최신 암호화 사본이 아직 준비되지 않았습니다. 준비되면 설정이 자동으로 계속됩니다."
+    },
+    "consent": {
+      "title": "이 프로필의 데이터를 교체할까요?",
+      "titleNamed": "\"{{profile}}\"의 데이터를 교체할까요?",
+      "description": "다른 기기의 데이터로 이 기기의 데이터를 교체합니다.",
+      "descriptionDated": "다른 기기의 데이터({{date}} 복사본)로 이 기기의 데이터를 교체합니다.",
+      "replace": "데이터 교체",
+      "backupLabel": "먼저 이 프로필 백업",
+      "backupAndReplace": "백업 후 교체",
+      "descriptionEmpty": "다른 기기의 포트폴리오가 비어 있습니다. 계속하면 이 기기의 포트폴리오가 해당 빈 포트폴리오로 대체됩니다."
+    },
+    "backingUp": {
+      "title": "이 프로필을 백업하는 중",
+      "description": "교체하기 전에 이 프로필의 사본을 저장하는 중입니다."
+    },
+    "replacing": {
+      "title": "이 기기의 데이터를 교체하는 중",
+      "description": "다른 기기의 데이터를 적용하는 중입니다."
+    },
+    "ready": {
+      "title": "준비 완료",
+      "description": "이 기기가 설정되어 동기화되었습니다."
+    },
+    "cancelled": {
+      "title": "설정이 취소되었습니다",
+      "description": "교체된 항목이 없습니다. 언제든지 설정을 완료할 수 있습니다."
+    },
+    "cancelSetup": "설정 취소",
+    "hide": "숨기기",
+    "continueInBackground": "백그라운드에서 계속",
+    "tryAgain": "다시 시도",
+    "startAgain": "처음부터 다시 시작",
+    "finishSetup": "설정 완료",
+    "retryHint": {
+      "transfer": "교체된 항목이 없습니다. 전송을 다시 시도할 수 있습니다.",
+      "consent": "교체된 항목이 없습니다. 다시 시도하면 승인을 다시 요청합니다.",
+      "new_attempt": "교체된 항목이 없습니다. 처음부터 다시 시작하여 다른 기기의 최신 사본을 사용하세요."
+    },
+    "errors": {
+      "SUBSCRIPTION_REQUIRED": "기기 동기화에는 활성 구독이 필요합니다",
+      "DEVICE_NOT_READY": "이 기기는 아직 동기화할 준비가 되지 않았습니다",
+      "SNAPSHOT_WAIT_TIMED_OUT": "제한 시간 내에 최신 사본이 준비되지 않았습니다",
+      "SNAPSHOT_UNAVAILABLE": "다른 기기의 사본을 더 이상 사용할 수 없습니다",
+      "SNAPSHOT_SCHEMA_NEWER": "설정을 완료하려면 앱을 업데이트하세요",
+      "SNAPSHOT_INVALID": "전송된 데이터를 확인할 수 없습니다",
+      "TRANSFER_FAILED": "전송이 완료되지 않았습니다",
+      "BACKUP_FAILED": "백업이 완료되지 않았습니다",
+      "RESTORE_FAILED": "데이터를 교체할 수 없습니다"
+    },
+    "banner": {
+      "title": "이 기기의 설정이 끝나지 않았습니다",
+      "running": "설정이 백그라운드에서 계속 진행 중입니다.",
+      "needsApproval": "이 프로필의 데이터를 교체하려면 승인이 필요합니다.",
+      "failed": "설정이 끝나기 전에 중단되었습니다.",
+      "cancelled": "설정이 취소되었습니다. 준비되면 설정을 완료하세요.",
+      "show": "진행 상황 보기"
+    }
+  },
+  "errors": {},
+  "wizard": {
+    "progressLabel": "설정 진행 상황",
+    "steps": {
+      "connect": "연결",
+      "transfer": "전송",
+      "download": "다운로드",
+      "apply": "적용",
+      "done": "완료"
+    },
+    "encryptedNote": "종단 간 암호화됩니다. 내 기기만 데이터를 읽을 수 있습니다.",
+    "backgroundNote": "이 창을 닫아도 됩니다. 설정은 백그라운드에서 계속됩니다.",
+    "details": {
+      "encrypt": "데이터 암호화",
+      "upload": "암호화된 사본 업로드",
+      "sendKeys": "새 기기로 키 전송",
+      "waitForUpload": "최신 사본 기다리기",
+      "downloadAndVerify": "암호화된 사본 다운로드 및 확인",
+      "replace": "이 기기의 데이터 교체",
+      "backup": "이 프로필 백업"
+    }
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "issues": {
+    "price_manual_valuation_missing": {
+      "title_one": "{{symbol}}の手動評価額が未設定です",
+      "title_other": "保有銘柄{{count}}件の手動評価額が未設定です",
+      "message": "手動・カスタムの保有銘柄は、評価済みのパフォーマンス対象ポジションとして扱う前に手動評価額の設定が必要です。"
+    },
+    "price_no_market_data": {
+      "title_one": "{{symbol}}の市場データがありません",
+      "title_other": "保有銘柄{{count}}件の市場データがありません",
+      "message": "一部の保有銘柄の市場データを取得できませんでした。銘柄が正しくないか、プロバイダー側の問題が原因の可能性があります。ポートフォリオの評価額が正確でない場合があります。"
+    },
+    "price_stale_outdated": {
+      "title_one": "保有銘柄{{count}}件の価格が古くなっています",
+      "title_other": "保有銘柄{{count}}件の価格が古くなっています",
+      "message": "一部の保有銘柄は3日以上価格が更新されていません。ポートフォリオの評価額が正確でない場合があります。"
+    },
+    "price_update_needed": {
+      "title_one": "保有銘柄{{count}}件の価格更新が必要です",
+      "title_other": "保有銘柄{{count}}件の価格更新が必要です",
+      "message": "一部の保有銘柄は最近価格が更新されていません。価格の同期をご検討ください。"
+    },
+    "fx_missing": {
+      "title_one": "{{currency}}の為替レートがありません",
+      "title_other": "通貨{{count}}件の為替レートがありません",
+      "message": "一部の保有銘柄を基準通貨に換算できません。ポートフォリオ全体の評価額に影響します。"
+    },
+    "fx_stale_error": {
+      "title_one": "為替レートが古くなっています",
+      "title_other": "通貨{{count}}件の為替レートが古くなっています",
+      "message": "一部の為替レートが3日以上更新されていません。通貨換算が正確でない場合があります。"
+    },
+    "fx_stale_warning": {
+      "title_one": "為替レートの更新が必要です",
+      "title_other": "通貨{{count}}件の為替レートの更新が必要です",
+      "message": "一部の為替レートが最近更新されていません。レートの再取得をご検討ください。"
+    },
+    "classification_missing_category": {
+      "title_one": "保有銘柄{{count}}件にカテゴリが必要です",
+      "title_other": "保有銘柄{{count}}件にカテゴリが必要です",
+      "message": "一部の保有銘柄に{{taxonomy}}が設定されていません。資産配分チャートや分析に影響します。"
+    },
+    "classification_legacy_migration": {
+      "title_one": "資産{{count}}件に旧形式の分類データがあります",
+      "title_other": "資産{{count}}件に旧形式の分類データがあります",
+      "message": "一部の資産には旧形式のセクター・国データが残っています。資産配分をより正確に把握するため、新しい分類体系に移行してください。"
+    },
+    "data_orphan_activity_account": {
+      "title_one": "取引が存在しない口座を参照しています",
+      "title_other": "取引{{count}}件が存在しない口座を参照しています",
+      "message": "一部の取引が、すでに存在しない口座を参照しています。計算エラーの原因になる場合があります。"
+    },
+    "data_orphan_activity_asset": {
+      "title_one": "取引が存在しない資産を参照しています",
+      "title_other": "取引{{count}}件が存在しない資産を参照しています",
+      "message": "一部の取引が、すでに存在しない資産を参照しています。計算エラーの原因になる場合があります。"
+    },
+    "data_negative_position": {
+      "title_one": "保有銘柄の数量がマイナスです",
+      "title_other": "保有銘柄{{count}}件の数量がマイナスです",
+      "message": "一部の保有銘柄の数量がマイナスになっています。通常は取引の登録漏れや誤りが原因です。"
+    },
+    "data_legacy_classification": {
+      "title_one": "資産{{count}}件に古い分類データがあります",
+      "title_other": "資産{{count}}件に古い分類データがあります",
+      "message": "一部の資産には旧形式のセクター・国データがあり、新しい分類体系へ移行できます。"
+    },
+    "data_negative_account_balance": {
+      "title_one": "口座の残高がマイナスになっていました",
+      "title_other": "口座{{count}}件の残高がマイナスになっていました",
+      "message": "1つ以上の投資口座で、履歴上の現金または合計評価額がマイナスになっているため、リターンが正しくない可能性があります。通常は、買付の前に入金または振替受入が、または売却の前に買付が登録されていないことが原因です。"
+    },
+    "data_negative_cash_balance": {
+      "title_one": "現金口座の残高がマイナスになっていました",
+      "title_other": "現金口座{{count}}件の残高がマイナスになっていました",
+      "message": "1つ以上の現金口座で、履歴上の残高がマイナスになっています。通常の当座貸越の場合もあれば、入金の登録漏れの場合もあります。"
+    },
+    "data_missing_lot_disposal_for_sell": {
+      "title_one": "売却に対応する取得原価が見つかりません",
+      "title_other": "売却{{count}}件に対応する取得原価が見つかりません",
+      "message": "売却をロットに紐付けられなかったため、実現損益やパフォーマンス要因分析が不完全になる場合があります。"
+    },
+    "data_missing_generated_valuation": {
+      "title_one": "生成された評価額履歴が不完全です",
+      "title_other": "生成された評価額データ{{count}}件が不足しています",
+      "message": "一部の保有銘柄のスナップショット日に、生成された評価額データがありません。不足している価格・手動評価額・為替レートを修正したうえで、口座履歴を再構築してください。"
+    },
+    "data_incomplete_valuation_value": {
+      "title_one": "評価額のカバー範囲が不完全です",
+      "title_other": "評価額データ{{count}}件で評価額のカバー範囲が不完全です",
+      "message": "生成された評価額データの一部で、評価額のカバー範囲が不完全です。パフォーマンスは正確性を保つため、該当するリターンを利用不可または精度低下として扱います。不足している価格や手動評価額を確認してください。"
+    },
+    "data_incomplete_valuation_basis": {
+      "title_one": "取得原価のカバー範囲が不完全です",
+      "title_other": "ポジション{{count}}件で取得原価が不完全です",
+      "message": "一部のポジションで、取得時の取得原価が欠落または部分的です。評価額は表示できますが、関連する取引を修正するまで損益や取得原価ベースのリターンは利用できない場合があります。"
+    },
+    "data_unknown_performance_flow_source": {
+      "title_one": "パフォーマンス計算上の資金フローの区分が不明です",
+      "title_other": "評価額データ{{count}}件で振替の区分が不明です",
+      "message": "生成された評価額データの一部に、ポートフォリオ内外の区分が不明な振替・資金フローが含まれています。該当日の振替取引を確認し、各振替を外部として指定するか、対応する口座に紐付けてください。"
+    },
+    "account_unconfigured": {
+      "title_one": "口座{{count}}件の設定が必要です",
+      "title_other": "口座{{count}}件の設定が必要です",
+      "message_one": "トラッキングモードを選択するとデータの同期を開始できます。",
+      "message_other": "トラッキングモードを選択するとデータの同期を開始できます。"
+    },
+    "account_timezone_missing": {
+      "title": "タイムゾーンが未設定です",
+      "message": "日付が地域の設定と一致するよう、一般設定でタイムゾーンを設定してください。"
+    },
+    "account_timezone_invalid": {
+      "title": "設定されたタイムゾーンが無効です",
+      "message": "設定されたタイムゾーン「{{timezone}}」は無効です。一般設定で修正してください。"
+    },
+    "account_timezone_mismatch": {
+      "title": "ブラウザとアプリのタイムゾーンが異なります",
+      "message": "設定されたタイムゾーンは「{{configured}}」ですが、ブラウザのタイムゾーンは「{{browser}}」です。日付は設定されたタイムゾーンに従います。"
+    },
+    "quote_sync_error": {
+      "title_one": "{{symbol}}の価格同期が失敗しています",
+      "title_other": "資産{{count}}件の価格同期が失敗しています",
+      "message": "これらの資産は価格の同期に繰り返し失敗しています。銘柄またはデータプロバイダーの設定を確認してください。"
+    },
+    "quote_sync_warning": {
+      "title_one": "{{symbol}}の同期に問題があります",
+      "title_other": "資産{{count}}件の同期に問題があります",
+      "message": "一部の資産で価格の同期に問題が発生しています。自動的に解消される場合があります。"
+    },
+    "transfer_incomplete": {
+      "title_one": "不完全な振替が見つかりました",
+      "title_other": "不完全な振替が{{count}}件見つかりました",
+      "message": "振替が対になっておらず、対応する相手側が見つかりません。そのため外部への資金移動として扱われ、リターンが歪む可能性があります。対応する振替と紐付けるか、意図した動作であれば外部として指定してください。"
+    },
+    "data_stale_projection": {
+      "title_one": "口座の履歴が最新ではありません",
+      "title_other": "{{count}}件の口座の履歴が最新ではありません",
+      "message": "これらの口座の履歴を最後に計算した後で、取引・価格・設定が変更されました。評価額とリターンに最新のデータを反映させるには、再計算してください。"
+    },
+    "data_rejected_activity": {
+      "title_one": "取引を適用できませんでした",
+      "title_other": "{{count}}件の取引を適用できませんでした",
+      "message": "これらの取引は記録どおりに適用できないため（例: 通貨の為替レートがない、または指定なしに空売りポジションを建てる・決済することになる）、残高・保有・リターンから除外されています。内容を確認してください。"
+    },
+    "data_oversold_activity": {
+      "title_one": "保有数量を超える売却があります",
+      "title_other": "保有数量を超える売却が{{count}}件あります",
+      "message": "これらの取引は、その時点で口座が保有していた数量を超えて売却または移管しています。保有分のみが減らされ、残りには取得原価がありません。購入や入庫の記録漏れがないか確認してください。"
+    },
+    "data_missing_activity_amount": {
+      "title_one": "金額のない取引があります",
+      "title_other": "金額のない取引が{{count}}件あります",
+      "message": "これらの取引には金額がないため、現金残高は変わっていません。現金の動きがあった場合は金額を入力してください。"
+    },
+    "fx_conflicting_rates": {
+      "title_one": "{{from}}と{{to}}の為替レートが一致しません",
+      "title_other": "{{count}}組の通貨ペアで為替レートが一致しません",
+      "message": "同じ日について両方向のレートが記録されており、互いに一致しません。各方向は記録どおりに使われるため、往復で換算すると金額が変わります。誤ったレートを修正または削除してください。"
+    }
+  },
+  "page": {
+    "heading": "データ健全性",
+    "text": "データ品質の問題を検出して解決します"
+  },
+  "severity": {
+    "info": "情報",
+    "warning": "警告",
+    "error": "エラー",
+    "critical": "重大"
+  },
+  "category": {
+    "prices": "価格",
+    "fxRates": "為替レート",
+    "categories": "カテゴリ",
+    "data": "データ",
+    "accounts": "口座",
+    "settings": "設定"
+  },
+  "actions": {
+    "fix": "修正",
+    "clear": "クリア",
+    "sync_prices": "価格を同期",
+    "fetch_fx": "為替レートを取得",
+    "migrate_classifications": "分類を移行",
+    "migrate_legacy_classifications": "移行を開始",
+    "retry_sync": "同期を再試行",
+    "to_holdings": "保有銘柄を表示",
+    "to_activities": "取引を表示",
+    "to_accounts": "口座を表示",
+    "to_taxonomies": "分類を表示",
+    "to_market_data": "市場データを表示",
+    "to_general_settings": "一般設定を開く",
+    "to_connect": "口座を設定",
+    "review_transfers": "振替を確認"
+  },
+  "updatedAt": "{{time}}に更新",
+  "healthy": {
+    "title": "データは良好です",
+    "description": "問題は見つかりませんでした。ポートフォリオのデータは整合性が取れており、最新の状態です。"
+  },
+  "loadError": {
+    "title": "健全性ステータスの読み込みに失敗しました",
+    "retry": "再試行"
+  },
+  "sheet": {
+    "groupedPriceMessage": "Wealthfolioはこれらの日付について直前の価格を引き継いで使用しています。実際の取引日については価格を再取得するか追加してください。休日や非取引日であれば、この問題を非表示にしてください。",
+    "pricesByInvestment": "投資対象別の価格",
+    "pricesByInvestmentHint": "投資対象を開くと価格を再取得または追加できます。休日や非取引日であれば、この問題を非表示にしてください。",
+    "priceHistoryNeedsReview": "価格履歴の確認が必要です",
+    "missingTradingDay_one": "不足している取引日1件: {{dates}}",
+    "missingTradingDay_other": "不足している取引日{{count}}件: {{dates}}",
+    "dateRange": "{{from}}〜{{to}}",
+    "priceIssueSummary": "{{assetCount}}{{assetWord}}にわたる{{diagnosticCount}}{{dateWord}}の価格",
+    "priceDate_one": "日付",
+    "priceDate_other": "日付",
+    "investment_one": "投資対象",
+    "investment_other": "投資対象"
+  },
+  "detail": {
+    "categories": {
+      "priceStaleness": {
+        "label": "価格の鮮度",
+        "description": "市場価格が古くなっており、更新が必要です。ポートフォリオの評価額の正確性に影響する場合があります。"
+      },
+      "fxIntegrity": {
+        "label": "為替レート",
+        "description": "通貨換算に使う為替レートが欠落または古くなっています。複数通貨のポートフォリオ計算に影響する場合があります。"
+      },
+      "classification": {
+        "label": "分類",
+        "description": "資産にカテゴリや分類が設定されていません。ポートフォリオの内訳や資産配分の分析に影響します。"
+      },
+      "dataConsistency": {
+        "label": "データの整合性",
+        "description": "ポートフォリオデータに不整合が検出されました。レポートや計算が不正確になる場合があります。"
+      },
+      "accountConfiguration": {
+        "label": "口座の設定",
+        "description": "データを同期する前に設定が必要な口座があります。トラッキングモードを設定するとデータの取り込みを開始できます。"
+      },
+      "settingsConfiguration": {
+        "label": "設定",
+        "description": "データを正しく解釈するために、確認が必要なアプリ設定があります。"
+      },
+      "timezoneMissing": {
+        "label": "タイムゾーン設定",
+        "description": "アプリのタイムゾーンが未設定です。設定するまで、表示される日付が地域の設定と一致しない場合があります。"
+      },
+      "timezoneInvalid": {
+        "label": "タイムゾーン設定",
+        "description": "設定されたタイムゾーンが無効です。一貫した日付処理に戻すため、一般設定で修正してください。"
+      },
+      "timezoneMismatch": {
+        "label": "タイムゾーン設定",
+        "description": "ブラウザのタイムゾーンが、アプリで設定されたタイムゾーンと異なります。ポートフォリオの日付は設定されたタイムゾーンに従います。"
+      }
+    },
+    "affectedItems": "影響を受ける項目({{count}})",
+    "impact": "影響",
+    "affectedItemsCount": "影響を受ける項目数",
+    "portfolioImpact": "ポートフォリオへの影響",
+    "details": "詳細",
+    "aboutThisIssue": "この問題について",
+    "dismiss": "非表示",
+    "dismissConfirm": {
+      "title": "この問題を非表示にしますか?",
+      "message": "この問題はヘルスセンターに表示されなくなります。元になったデータが変化すると再び表示されます。",
+      "pendingText": "非表示にしています..."
+    },
+    "affectedItems_other": "影響を受ける項目({{count}})"
+  }
+}

@@ -1,0 +1,315 @@
+{
+  "providers": {
+    "ollama": {
+      "name": "Ollama",
+      "type": "local",
+      "icon": "LogoOllama",
+      "description": "Local AI models on your machine",
+      "envKey": "OLLAMA_API_KEY",
+      "defaultConfig": {
+        "enabled": false,
+        "priority": 10,
+        "url": "http://localhost:11434"
+      },
+      "connectionFields": [
+        {
+          "key": "baseUrl",
+          "label": "Server URL",
+          "type": "text",
+          "placeholder": "http://localhost:11434",
+          "required": true
+        }
+      ],
+      "models": {
+        "gemma4:e4b": {
+          "capabilities": { "tools": true, "thinking": false, "vision": true }
+        },
+        "qwen3.5:9b": {
+          "capabilities": { "tools": true, "thinking": true, "vision": true }
+        },
+        "gpt-oss:20b": {
+          "capabilities": { "tools": true, "thinking": true, "vision": true }
+        },
+        "ministral-3": {
+          "capabilities": { "tools": true, "thinking": false, "vision": true }
+        },
+        "deepseek-r1:8b": {
+          "capabilities": { "tools": false, "thinking": true, "vision": false }
+        }
+      },
+      "defaultModel": "gemma4:e4b",
+      "titleModelId": "gemma4:e4b",
+      "documentationUrl": "https://ollama.ai/docs",
+      "tuning": {
+        "temperature": 0.2,
+        "maxTokens": 16384,
+        "extraOptions": {
+          "num_ctx": 16384,
+          "repeat_penalty": 1.1,
+          "repeat_last_n": 64,
+          "top_k": 40,
+          "top_p": 0.9,
+          "min_p": 0.0
+        }
+      }
+    },
+    "groq": {
+      "name": "Groq",
+      "type": "api",
+      "icon": "LogoGroq",
+      "description": "Fast inference cloud API",
+      "envKey": "GROQ_API_KEY",
+      "defaultConfig": {
+        "enabled": false,
+        "priority": 20
+      },
+      "connectionFields": [
+        {
+          "key": "apiKey",
+          "label": "API Key",
+          "type": "password",
+          "placeholder": "Enter your Groq API key",
+          "required": true,
+          "helpUrl": "https://console.groq.com/keys"
+        },
+        {
+          "key": "baseUrl",
+          "label": "Custom Endpoint",
+          "type": "text",
+          "placeholder": "Leave empty to use default",
+          "required": false
+        }
+      ],
+      "models": {
+        "groq/compound": {
+          "capabilities": { "tools": false, "thinking": false, "vision": false }
+        },
+        "openai/gpt-oss-120b": {
+          "capabilities": { "tools": true, "thinking": true, "vision": false }
+        },
+        "moonshotai/kimi-k2-instruct-0905": {
+          "capabilities": { "tools": true, "thinking": false, "vision": false }
+        }
+      },
+      "defaultModel": "openai/gpt-oss-120b",
+      "titleModelId": "groq/compound",
+      "documentationUrl": "https://console.groq.com/docs",
+      "tuning": {
+        "temperature": 0.2,
+        "maxTokens": 16384
+      }
+    },
+    "google": {
+      "name": "Google AI",
+      "type": "api",
+      "icon": "LogoGoogle",
+      "description": "Google Generative AI models",
+      "envKey": "GEMINI_API_KEY",
+      "defaultConfig": {
+        "enabled": false,
+        "priority": 30
+      },
+      "connectionFields": [
+        {
+          "key": "apiKey",
+          "label": "API Key",
+          "type": "password",
+          "placeholder": "Enter your Google AI API key",
+          "required": true,
+          "helpUrl": "https://makersuite.google.com/app/apikey"
+        },
+        {
+          "key": "baseUrl",
+          "label": "Custom Endpoint",
+          "type": "text",
+          "placeholder": "Leave empty to use default",
+          "required": false
+        }
+      ],
+      "models": {
+        "gemini-3-flash-preview": {
+          "capabilities": { "tools": true, "thinking": true, "vision": true }
+        },
+        "gemini-2.5-flash": {
+          "capabilities": { "tools": true, "thinking": true, "vision": true }
+        },
+        "gemini-2.5-pro": {
+          "capabilities": { "tools": true, "thinking": true, "vision": true }
+        }
+      },
+      "defaultModel": "gemini-2.5-flash",
+      "titleModelId": "gemini-2.5-flash",
+      "documentationUrl": "https://ai.google.dev/docs",
+      "tuning": {
+        "temperature": 0.2,
+        "maxTokens": 16384,
+        "extraOptions": {
+          "safetySettings": [
+            { "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_ONLY_HIGH" },
+            { "category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_ONLY_HIGH" },
+            { "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_ONLY_HIGH" },
+            { "category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_ONLY_HIGH" }
+          ]
+        }
+      }
+    },
+    "anthropic": {
+      "name": "Anthropic",
+      "type": "api",
+      "icon": "LogoAnthropic",
+      "description": "Claude AI models from Anthropic",
+      "envKey": "ANTHROPIC_API_KEY",
+      "defaultConfig": {
+        "enabled": false,
+        "priority": 50
+      },
+      "connectionFields": [
+        {
+          "key": "apiKey",
+          "label": "API Key",
+          "type": "password",
+          "placeholder": "Enter your Anthropic API key",
+          "required": true,
+          "helpUrl": "https://console.anthropic.com/account/keys"
+        },
+        {
+          "key": "baseUrl",
+          "label": "Custom Endpoint",
+          "type": "text",
+          "placeholder": "Leave empty to use default",
+          "required": false
+        }
+      ],
+      "models": {
+        "claude-sonnet-4-6": {
+          "capabilities": { "tools": true, "thinking": false, "vision": true }
+        },
+        "claude-haiku-4-5-20251001": {
+          "capabilities": { "tools": true, "thinking": false, "vision": true }
+        },
+        "claude-opus-4-7": {
+          "capabilities": { "tools": true, "thinking": false, "vision": true }
+        }
+      },
+      "defaultModel": "claude-sonnet-4-6",
+      "titleModelId": "claude-haiku-4-5-20251001",
+      "documentationUrl": "https://docs.anthropic.com/en/api/getting-started",
+      "tuning": {
+        "maxTokens": 16384,
+        "maxTokensThinking": 32000
+      }
+    },
+    "openai": {
+      "name": "OpenAI",
+      "type": "api",
+      "icon": "LogoOpenAI",
+      "description": "ChatGPT and GPT models from OpenAI",
+      "envKey": "OPENAI_API_KEY",
+      "defaultConfig": {
+        "enabled": false,
+        "priority": 40
+      },
+      "connectionFields": [
+        {
+          "key": "apiKey",
+          "label": "API Key",
+          "type": "password",
+          "placeholder": "Enter your OpenAI API key",
+          "required": true,
+          "helpUrl": "https://platform.openai.com/api-keys"
+        },
+        {
+          "key": "baseUrl",
+          "label": "Custom Endpoint",
+          "type": "text",
+          "placeholder": "Leave empty to use default",
+          "required": false
+        }
+      ],
+      "models": {
+        "gpt-5.4": {
+          "capabilities": { "tools": true, "thinking": true, "vision": true }
+        },
+        "gpt-5.4-mini": {
+          "capabilities": { "tools": true, "thinking": false, "vision": true }
+        },
+        "gpt-5.4-nano": {
+          "capabilities": { "tools": true, "thinking": false, "vision": false }
+        }
+      },
+      "defaultModel": "gpt-5.4-mini",
+      "titleModelId": "gpt-5.4-nano",
+      "documentationUrl": "https://platform.openai.com/docs/introduction",
+      "tuning": {
+        "temperature": 0.2,
+        "maxTokens": 16384
+      }
+    },
+    "openrouter": {
+      "name": "OpenRouter",
+      "type": "api",
+      "icon": "LogoOpenRouter",
+      "description": "Access to multiple AI models via OpenRouter",
+      "envKey": "OPENROUTER_API_KEY",
+      "defaultConfig": {
+        "enabled": false,
+        "priority": 60
+      },
+      "connectionFields": [
+        {
+          "key": "apiKey",
+          "label": "API Key",
+          "type": "password",
+          "placeholder": "Enter your OpenRouter API key",
+          "required": true,
+          "helpUrl": "https://openrouter.ai/keys"
+        },
+        {
+          "key": "baseUrl",
+          "label": "Custom Endpoint",
+          "type": "text",
+          "placeholder": "Leave empty to use default",
+          "required": false
+        }
+      ],
+      "models": {
+        "openrouter/free": {
+          "capabilities": { "tools": true, "thinking": false, "vision": true }
+        },
+        "qwen/qwq-32b:free": {
+          "capabilities": { "tools": true, "thinking": false, "vision": true }
+        },
+        "openai/gpt-oss-120b:free": {
+          "capabilities": { "tools": true, "thinking": false, "vision": true }
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "capabilities": { "tools": false, "thinking": false, "vision": false }
+        }
+      },
+      "defaultModel": "openrouter/free",
+      "titleModelId": "openrouter/free",
+      "documentationUrl": "https://openrouter.ai/docs",
+      "tuning": {
+        "temperature": 0.2,
+        "maxTokens": 16384
+      }
+    }
+  },
+  "capabilities": {
+    "tools": {
+      "name": "Tools",
+      "description": "Can use external tools and function calls",
+      "icon": "Wrench"
+    },
+    "thinking": {
+      "name": "Thinking",
+      "description": "Shows reasoning process and chain of thought",
+      "icon": "Brain"
+    },
+    "vision": {
+      "name": "Vision",
+      "description": "Can analyze and understand images",
+      "icon": "Eye"
+    }
+  }
+}

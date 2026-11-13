@@ -1,0 +1,70 @@
+[package]
+name = "wealthfolio-ai"
+version.workspace = true
+edition.workspace = true
+description = "AI assistant with LLM orchestration using rig-core for Wealthfolio"
+authors = ["Aziz Fadil"]
+license = "AGPL-3.0"
+repository = "https://github.com/wealthfolio/wealthfolio"
+
+[features]
+default = []
+# Exposes the test-only `MockEnvironment` and friends so eval binaries
+# (`cargo run --bin eval --features test-utils`) can construct stub services.
+test-utils = []
+# Build the eval binary. Wraps test-utils plus deps the runner needs.
+eval = ["test-utils", "dep:toml", "dep:regex", "dep:env_logger"]
+
+[dependencies]
+# Workspace dependencies
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+uuid = { workspace = true, features = ["v7"] }
+async-trait = { workspace = true }
+futures = { workspace = true }
+log = { workspace = true }
+reqwest = { workspace = true }
+sha2 = { workspace = true }
+
+# LLM orchestration facade (portable contracts + agent runtime)
+rig = { version = "0.42.0", default-features = false, features = ["agent", "reqwest"] }
+wealthfolio-http = { workspace = true }
+
+# Lazy static initialization
+once_cell = "1"
+
+# CSV parsing
+csv = "1.3"
+
+# Streaming
+tokio-stream = "0.1"
+
+# Numbers (for Decimal to f64 conversion)
+rust_decimal = { workspace = true }
+
+# Sibling crates
+wealthfolio-agent-tools = { path = "../agent-tools" }
+wealthfolio-core = { path = "../core" }
+wealthfolio-spending = { path = "../spending" }
+
+# Optional: only pulled in when the `eval` feature is enabled (eval binary).
+toml = { version = "0.8", optional = true }
+regex = { version = "1", optional = true }
+env_logger = { version = "0.11", optional = true }
+
+[dev-dependencies]
+tempfile = "3"
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+insta = { version = "1", features = ["json"] }
+
+[[bin]]
+name = "eval"
+path = "src/bin/eval.rs"
+required-features = ["eval"]
+
+[lints]
+workspace = true
